@@ -1,0 +1,54 @@
+<section class="tab {{#if tab.active}}active{{/if}}" data-tab="general">
+  <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.Config.Identity"}}</legend>
+
+    {{formGroup fields.enabled value=source.enabled name="enabled" localize=true}}
+    {{formGroup fields.label value=source.label name="label" localize=true}}
+
+    <div class="form-group">
+      <label for="{{rootId}}-terminalId">{{localize "RETRO_CRT_TERMINAL.Fields.TerminalId"}}</label>
+      <div class="form-fields terminal-id-field">
+        <input id="{{rootId}}-terminalId" type="text" name="terminalId" value="{{source.terminalId}}" readonly spellcheck="false">
+        <button type="button" class="icon-button" data-action="editId" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.EditId'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.EditId'}}">
+          <i class="fa-solid fa-pen" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="icon-button" data-action="copyId" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.CopyId'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.CopyId'}}">
+          <i class="fa-solid fa-copy" aria-hidden="true"></i>
+        </button>
+      </div>
+      <p class="hint">{{localize "RETRO_CRT_TERMINAL.Hints.TerminalId"}}</p>
+    </div>
+
+    <div class="form-group">
+      <label for="{{rootId}}-startPageUuid">{{localize "RETRO_CRT_TERMINAL.Fields.StartPage"}}</label>
+      <div class="form-fields">
+        <select id="{{rootId}}-startPageUuid" name="startPageUuid">
+          <option value="">{{localize "RETRO_CRT_TERMINAL.Fields.FirstPageFallback"}}</option>
+          {{#each startPages}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+        </select>
+      </div>
+      <p class="hint">{{localize "RETRO_CRT_TERMINAL.Hints.StartPage"}}</p>
+    </div>
+  </fieldset>
+
+  <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.Config.Publication"}}</legend>
+    {{formGroup fields.launcher.fields.published value=source.launcher.published name="launcher.published" localize=true}}
+    {{formGroup fields.launcher.fields.sort value=source.launcher.sort name="launcher.sort" localize=true}}
+    <div class="form-group">
+      <label for="{{rootId}}-launcherIcon">{{localize "RETRO_CRT_TERMINAL.Fields.Icon"}}</label>
+      <div class="form-fields launcher-icon-field">
+        <i class="{{source.launcher.icon}}" aria-hidden="true"></i>
+        <input id="{{rootId}}-launcherIcon" type="text" name="launcher.icon" value="{{source.launcher.icon}}" spellcheck="false">
+      </div>
+      <p class="hint">{{localize "RETRO_CRT_TERMINAL.Hints.Icon"}}</p>
+    </div>
+  </fieldset>
+
+  <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.Config.Behavior"}}</legend>
+    {{formGroup fields.behavior.fields.showBootSequence value=source.behavior.showBootSequence name="behavior.showBootSequence" localize=true}}
+    {{formGroup fields.behavior.fields.rememberPage value=source.behavior.rememberPage name="behavior.rememberPage" localize=true}}
+    {{formGroup fields.behavior.fields.closeOnEscapeAtRoot value=source.behavior.closeOnEscapeAtRoot name="behavior.closeOnEscapeAtRoot" localize=true}}
+  </fieldset>
+</section>

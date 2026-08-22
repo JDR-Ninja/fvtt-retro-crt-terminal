@@ -1,0 +1,34 @@
+<div class="sync-config-form">
+  <header class="sync-config-header">
+    <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+    <div>
+      <h2>{{journal.name}}</h2>
+      <p>{{localize "RETRO_CRT_TERMINAL.Sync.Hint"}}</p>
+    </div>
+  </header>
+
+  {{#if anotherActive}}
+    <p class="sync-warning"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Sync.ReplaceWarning"}}</p>
+  {{/if}}
+  {{#if activeHere}}
+    <p class="sync-current {{#unless controllerOnline}}is-offline{{/unless}}">
+      {{localize "RETRO_CRT_TERMINAL.Sync.CurrentController"}} <strong>{{controllerName}}</strong>
+      {{#unless controllerOnline}}— {{localize "RETRO_CRT_TERMINAL.Sync.Frozen"}}{{/unless}}
+    </p>
+  {{/if}}
+
+  <fieldset>
+    <legend>{{localize "RETRO_CRT_TERMINAL.Sync.Controller"}}</legend>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Sync.ControllerLabel"}}</span>
+      <select name="controllerUserId" required>
+        {{#each users}}<option value="{{id}}" {{#if controller}}selected{{/if}}>{{name}}{{#if isGM}} ({{localize "RETRO_CRT_TERMINAL.Sync.Gm"}}){{/if}}</option>{{/each}}
+      </select>
+    </label>
+  </fieldset>
+
+  <footer class="form-actions">
+    {{#if activeHere}}<button type="button" data-action="stop" class="danger"><i class="fa-solid fa-stop" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Sync.Stop"}}</button>{{/if}}
+    <button type="submit"><i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>{{localize submitLabel}}</button>
+  </footer>
+</div>

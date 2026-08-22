@@ -1,0 +1,5 @@
+2026/08/22-10:54:03.885 9474 Delete type=3 #1
+2026/08/22-10:54:03.887 8a74 Level-0 table #5: started
+2026/08/22-10:54:03.889 8a74 Level-0 table #5: 8659 bytes OK
+2026/08/22-10:54:03.890 8a74 Delete type=0 #3
+2026/08/22-10:54:03.891 8a74 Manual compaction at level-0 from '!folders!MacroFolderEN001' @ 72057594037927935 : 1 .. '!macros!MacroFrStop00001' @ 0 : 0; will stop at (end)

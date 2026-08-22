@@ -1,0 +1,58 @@
+<div class="config-form">
+  <p class="form-hint">{{localize "RETRO_CRT_TERMINAL.Config.Hint"}}</p>
+
+  <fieldset>
+    <legend>{{localize "RETRO_CRT_TERMINAL.Config.Identity"}}</legend>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Fields.Enabled"}}</span>
+      <input type="checkbox" name="enabled" {{checked config.enabled}} {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Fields.TerminalId"}}</span>
+      <input type="text" name="terminalId" value="{{config.terminalId}}" required {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Fields.Label"}}</span>
+      <input type="text" name="label" value="{{config.label}}" required {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Fields.StartPage"}}</span>
+      <select name="startPageUuid" {{#unless editable}}disabled{{/unless}}>
+        <option value="">{{localize "RETRO_CRT_TERMINAL.Fields.FirstPageFallback"}}</option>
+        {{#each pages}}<option value="{{uuid}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+      </select>
+    </label>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Fields.Theme"}}</span>
+      <select name="themeId" {{#unless editable}}disabled{{/unless}}>
+        {{#each themes}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+      </select>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "RETRO_CRT_TERMINAL.Config.Publication"}}</legend>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Fields.Published"}}</span>
+      <input type="checkbox" name="published" {{checked config.launcher.published}} {{#unless editable}}disabled{{/unless}}>
+    </label>
+    <label class="form-row">
+      <span>{{localize "RETRO_CRT_TERMINAL.Fields.Sort"}}</span>
+      <input type="number" name="launcherSort" value="{{config.launcher.sort}}" step="1" {{#unless editable}}disabled{{/unless}}>
+    </label>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "RETRO_CRT_TERMINAL.Config.Behavior"}}</legend>
+    <label class="form-row"><span>{{localize "RETRO_CRT_TERMINAL.Fields.RememberPage"}}</span><input type="checkbox" name="rememberPage" {{checked config.behavior.rememberPage}} {{#unless editable}}disabled{{/unless}}></label>
+    <label class="form-row"><span>{{localize "RETRO_CRT_TERMINAL.Fields.BootSequence"}}</span><input type="checkbox" name="showBootSequence" {{checked config.behavior.showBootSequence}} {{#unless editable}}disabled{{/unless}}></label>
+    <label class="form-row"><span>{{localize "RETRO_CRT_TERMINAL.Fields.CloseAtRoot"}}</span><input type="checkbox" name="closeOnEscapeAtRoot" {{checked config.behavior.closeOnEscapeAtRoot}} {{#unless editable}}disabled{{/unless}}></label>
+  </fieldset>
+
+  <footer class="form-actions">
+    <button type="button" data-action="open"><i class="fa-solid fa-play" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.Open"}}</button>
+    <button type="button" data-action="structure"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.Structure"}}</button>
+    <button type="button" data-action="theme"><i class="fa-solid fa-palette" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.Theme"}}</button>
+    {{#if editable}}<button type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.Save"}}</button>{{/if}}
+  </footer>
+</div>

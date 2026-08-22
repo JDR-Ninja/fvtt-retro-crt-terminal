@@ -1,0 +1,99 @@
+{
+  "_id": "TplFrMenu0000001",
+  "name": "Modèle 01 — Menu simple",
+  "pages": [
+    {
+      "_id": "TplFrMenuMain001",
+      "name": "Menu principal",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# TERMINAL D’INFORMATION\n\nConnexion établie. Sélectionnez une rubrique.\n\n::menu children\n::end",
+        "pageId": "main",
+        "pageType": "menu",
+        "navigation": { "label": "MENU PRINCIPAL", "parent": "", "sort": 0, "showInParentMenu": false },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 100000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrMenu0000001.TplFrMenuMain001"
+    },
+    {
+      "_id": "TplFrMenuStatus1",
+      "name": "État du système",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# ÉTAT DU SYSTÈME\n\n- Alimentation : STABLE\n- Réseau : EN LIGNE\n- Accès externe : DÉSACTIVÉ\n\nDernière vérification : 08:42.",
+        "pageId": "status",
+        "pageType": "system",
+        "navigation": { "label": "ÉTAT DU SYSTÈME", "parent": "main", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 200000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrMenu0000001.TplFrMenuStatus1"
+    },
+    {
+      "_id": "TplFrMenuFiles01",
+      "name": "Dossiers publics",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# DOSSIERS PUBLICS\n\nIndex des documents disponibles.\n\n::menu children\n::end",
+        "pageId": "public-files",
+        "pageType": "directory",
+        "navigation": { "label": "DOSSIERS PUBLICS", "parent": "main", "sort": 200, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 300000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrMenu0000001.TplFrMenuFiles01"
+    },
+    {
+      "_id": "TplFrMenuFile001",
+      "name": "Note de bienvenue",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# NOTE DE BIENVENUE\n\nBienvenue à bord.\n\nRemplacez ce texte par un rapport, une fiche de lieu ou tout autre document que les joueurs peuvent consulter librement.",
+        "pageId": "welcome-note",
+        "pageType": "document",
+        "navigation": { "label": "NOTE DE BIENVENUE", "parent": "public-files", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 400000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrMenu0000001.TplFrMenuFile001"
+    }
+  ],
+  "folder": "TplFolderFR00001",
+  "flags": {
+    "retro-crt-terminal": {
+      "template": true,
+      "templateLanguage": "fr",
+      "terminal": {
+        "enabled": true,
+        "terminalId": "modele-menu-simple",
+        "label": "Modèle — Menu simple",
+        "startPageUuid": "",
+        "themeId": "green-crt",
+        "themeOverrides": {},
+        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-computer", "audience": "observers" },
+        "behavior": { "rememberPage": false, "showBootSequence": true, "closeOnEscapeAtRoot": false }
+      }
+    }
+  },
+  "sort": 100000,
+  "ownership": { "default": 0 },
+  "categories": [],
+  "_key": "!journal!TplFrMenu0000001"
+}

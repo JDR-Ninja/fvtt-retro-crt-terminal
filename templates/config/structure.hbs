@@ -1,0 +1,46 @@
+<section class="tab {{#if tab.active}}active{{/if}}" data-tab="structure">
+  <p class="hint">{{localize "RETRO_CRT_TERMINAL.Structure.Hint"}}</p>
+
+  {{#if empty}}
+    <p class="empty-state">{{localize "RETRO_CRT_TERMINAL.Structure.Empty"}}</p>
+  {{else}}
+    <div class="structure-table-wrap">
+      <table class="structure-table">
+        <thead>
+          <tr>
+            <th>{{localize "RETRO_CRT_TERMINAL.Fields.Page"}}</th>
+            <th>{{localize "RETRO_CRT_TERMINAL.Fields.Parent"}}</th>
+            <th>{{localize "RETRO_CRT_TERMINAL.Fields.Release"}}</th>
+            <th>{{localize "RETRO_CRT_TERMINAL.Fields.Actions"}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each pages}}
+            <tr>
+              <td><strong>{{label}}</strong><small>{{pageId}}</small></td>
+              <td>{{parent}}</td>
+              <td>
+                <span class="state-pill is-{{visibility}}">{{visibilityLabel}}</span>
+                <span class="state-pill is-{{access}}">{{accessLabel}}</span>
+              </td>
+              <td class="row-actions">
+                <button type="button" class="icon-button" data-action="openPage" data-uuid="{{uuid}}" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.Open'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.Open'}}"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
+                <button type="button" class="icon-button" data-action="editPage" data-uuid="{{uuid}}" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.Edit'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.Edit'}}"><i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+                <button type="button" class="icon-button" data-action="toggleVisibility" data-uuid="{{uuid}}" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.ToggleVisibility'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.ToggleVisibility'}}"><i class="fa-solid {{#if isHidden}}fa-eye{{else}}fa-eye-slash{{/if}}" aria-hidden="true"></i></button>
+                <button type="button" class="icon-button" data-action="toggleAccess" data-uuid="{{uuid}}" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.ToggleLock'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.ToggleLock'}}"><i class="fa-solid {{#if isLocked}}fa-lock-open{{else}}fa-lock{{/if}}" aria-hidden="true"></i></button>
+                <button type="button" class="icon-button" data-action="copyUuid" data-uuid="{{uuid}}" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.CopyUuid'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.CopyUuid'}}"><i class="fa-solid fa-copy" aria-hidden="true"></i></button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{/if}}
+
+  {{#if issues.length}}
+    <section class="validation-issues">
+      <h3>{{localize "RETRO_CRT_TERMINAL.Diagnostics.Validation"}}</h3>
+      <ul>{{#each issues}}<li class="is-{{severity}}"><strong>{{pageName}}</strong> {{message}}{{#if line}} (L{{line}}){{/if}}</li>{{/each}}</ul>
+    </section>
+  {{/if}}
+</section>

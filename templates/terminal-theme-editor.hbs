@@ -1,0 +1,55 @@
+<div class="theme-editor-form">
+  <section class="theme-section theme-preset-row">
+    <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Preset"}}</span><select name="themeId" {{#unless editable}}disabled{{/unless}}>{{#each themes}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+    {{#if editable}}<button type="button" data-action="loadPreset"><i class="fa-solid fa-rotate" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.LoadPreset"}}</button>{{/if}}
+  </section>
+
+  <fieldset class="theme-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.ThemeEditor.Typography"}}</legend>
+    <div class="theme-grid">
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Font"}}</span><select name="font" {{#unless editable}}disabled{{/unless}}>{{#each fonts}}<option value="{{name}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}</select></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.FontSize"}}</span><input type="number" name="fontSize" value="{{theme.typography.size}}" min="10" max="72" step="1" {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.LineHeight"}}</span><input type="number" name="lineHeight" value="{{theme.typography.lineHeight}}" min="0.8" max="3" step="0.05" {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.LetterSpacing"}}</span><input type="number" name="letterSpacing" value="{{theme.typography.letterSpacing}}" min="-2" max="12" step="0.25" {{#unless editable}}disabled{{/unless}}></label>
+      <label class="effect-toggle"><span>{{localize "RETRO_CRT_TERMINAL.Fields.Uppercase"}}</span><input type="checkbox" name="uppercase" {{checked theme.typography.uppercase}} {{#unless editable}}disabled{{/unless}}></label>
+    </div>
+  </fieldset>
+
+  <fieldset class="theme-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.ThemeEditor.Colors"}}</legend>
+    <div class="theme-grid color-grid">
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Foreground"}}</span><input type="color" name="foreground" value="{{theme.colors.foreground}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Background"}}</span><input type="color" name="background" value="{{theme.colors.background}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Muted"}}</span><input type="color" name="muted" value="{{theme.colors.muted}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Highlight"}}</span><input type="color" name="highlight" value="{{theme.colors.highlight}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Border"}}</span><input type="color" name="border" value="{{theme.colors.border}}" {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Error"}}</span><input type="color" name="error" value="{{theme.colors.error}}" {{#unless editable}}disabled{{/unless}}></label>
+    </div>
+  </fieldset>
+
+  <fieldset class="theme-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.ThemeEditor.Effects"}}</legend>
+    <div class="effects-grid">
+      <label class="effect-toggle"><span>{{localize "RETRO_CRT_TERMINAL.Fields.Scanlines"}}</span><input type="checkbox" name="scanlinesEnabled" {{checked theme.effects.scanlines.enabled}} {{#unless editable}}disabled{{/unless}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Opacity"}}</span><input type="number" name="scanlineOpacity" value="{{theme.effects.scanlines.opacity}}" min="0" max="1" step="0.01"></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Size"}}</span><input type="number" name="scanlineSize" value="{{theme.effects.scanlines.size}}" min="1" max="10" step="1"></label>
+      <label class="effect-toggle"><span>{{localize "RETRO_CRT_TERMINAL.Fields.Glow"}}</span><input type="checkbox" name="glowEnabled" {{checked theme.effects.glow.enabled}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Strength"}}</span><input type="number" name="glowStrength" value="{{theme.effects.glow.strength}}" min="0" max="1" step="0.01"></label>
+      <span></span>
+      <label class="effect-toggle"><span>{{localize "RETRO_CRT_TERMINAL.Fields.Flicker"}}</span><input type="checkbox" name="flickerEnabled" {{checked theme.effects.flicker.enabled}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Strength"}}</span><input type="number" name="flickerStrength" value="{{theme.effects.flicker.strength}}" min="0" max="0.4" step="0.01"></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Speed"}}</span><input type="number" name="flickerSpeed" value="{{theme.effects.flicker.speed}}" min="20" max="1000" step="10"></label>
+      <label class="effect-toggle"><span>{{localize "RETRO_CRT_TERMINAL.Fields.Noise"}}</span><input type="checkbox" name="noiseEnabled" {{checked theme.effects.noise.enabled}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Strength"}}</span><input type="number" name="noiseStrength" value="{{theme.effects.noise.strength}}" min="0" max="0.4" step="0.01"></label>
+      <span></span>
+      <label class="effect-toggle"><span>{{localize "RETRO_CRT_TERMINAL.Fields.Vhs"}}</span><input type="checkbox" name="vhsEnabled" {{checked theme.effects.vhs.enabled}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Tracking"}}</span><input type="number" name="vhsTracking" value="{{theme.effects.vhs.tracking}}" min="0" max="1" step="0.01"></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Jitter"}}</span><input type="number" name="vhsJitter" value="{{theme.effects.vhs.jitter}}" min="0" max="8" step="0.1"></label>
+      <span></span><label><span>{{localize "RETRO_CRT_TERMINAL.Fields.ChromaticOffset"}}</span><input type="number" name="chromaticOffset" value="{{theme.effects.vhs.chromaticOffset}}" min="0" max="8" step="0.1"></label><span></span>
+      <label class="effect-toggle"><span>{{localize "RETRO_CRT_TERMINAL.Fields.Curvature"}}</span><input type="checkbox" name="curvatureEnabled" {{checked theme.effects.curvature.enabled}}></label>
+      <label><span>{{localize "RETRO_CRT_TERMINAL.Fields.Strength"}}</span><input type="number" name="curvatureStrength" value="{{theme.effects.curvature.strength}}" min="0" max="1" step="0.01"></label>
+    </div>
+  </fieldset>
+
+  {{#if editable}}<footer class="form-actions"><button type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.Save"}}</button></footer>{{/if}}
+</div>

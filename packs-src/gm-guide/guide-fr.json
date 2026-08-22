@@ -1,0 +1,315 @@
+{
+  "_id": "RetroGuideFR0001",
+  "name": "Retro CRT Terminal — Guide du MJ",
+  "pages": [
+    {
+      "_id": "GuideQuickStart1",
+      "name": "1. Démarrage rapide",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Démarrage rapide</h1><p>Ce parcours produit un premier terminal fonctionnel en quelques minutes.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/terminal-in-play.webp\" alt=\"Un terminal terminé en partie : la console de sécurité d’Orpheus Station, avec une ligne de menu sélectionnée et une entrée verrouillée\"></figure><p><strong>Option la plus rapide :</strong> ouvre les dossiers <em>Français — Modèles</em> ou <em>English — Templates</em> de ce Compendium, importe un Journal dans le monde, puis renomme-le et attribue-lui un ID de terminal unique avant de le publier.</p><ol><li>Crée un <strong>Journal</strong> Foundry.</li><li>Ajoute une page du type <strong>Terminal</strong> et nomme-la <em>Menu principal</em>.</li><li>Donne-lui l’identifiant de page <code>main</code>.</li><li>Dans sa source, écris un titre, un court texte et un menu automatique.</li><li>Depuis l’en-tête du Journal, ouvre <strong>Configurer le terminal</strong>, choisis cette page comme page d’accueil et active <strong>Publié</strong>.</li><li>Accorde au groupe le niveau <strong>Observateur</strong> sur le Journal.</li><li>Ouvre le contrôle de scène <strong>Terminaux</strong> et teste avec un compte joueur.</li></ol><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/journal-header-menu.webp\" alt=\"Le menu d’en-tête du Journal, ouvert avec le bouton à trois points, listant Configure Terminal, Terminal Structure et Manage synchronization\"></figure><p>Toutes les actions du module se trouvent dans le menu d’en-tête du Journal, derrière le bouton <strong>⋮</strong>.</p><pre><code># TERMINAL CENTRAL\n\nSystème en ligne.\n\n::menu children\n::end</code></pre><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/launcher.webp\" alt=\"Le contrôle de scène Terminaux sélectionné dans la barre d’outils, avec le lanceur listant un terminal publié\"></figure><p>Le contrôle de scène <strong>Terminaux</strong> ouvre le lanceur que tes joueurs utiliseront.</p><p><strong>Principe important :</strong> la publication rend le terminal visible dans le lanceur, tandis que les permissions Foundry déterminent qui peut réellement le lire.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 100000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideQuickStart1"
+    },
+    {
+      "_id": "GuideConfigure01",
+      "name": "2. Créer et configurer",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Créer et configurer un terminal</h1><h2>Le Journal racine</h2><p>Un terminal correspond à un Journal contenant une ou plusieurs pages Terminal. Garde dans un même Journal les pages qui appartiennent au même appareil fictif.</p><h2>Identité</h2><ul><li><strong>Activé :</strong> autorise l’utilisation du terminal.</li><li><strong>ID du terminal :</strong> identifiant stable, court et unique, par exemple <code>security-console</code>.</li><li><strong>Libellé :</strong> nom présenté aux joueurs.</li><li><strong>Page d’accueil :</strong> page ouverte au lancement et avec la touche Accueil.</li><li><strong>Thème :</strong> apparence générale du terminal.</li></ul><h2>Comportement</h2><ul><li><strong>Mémoriser la page :</strong> chaque utilisateur reprend sa dernière page en mode individuel.</li><li><strong>Séquence de démarrage :</strong> joue l’animation CRT à l’ouverture.</li><li><strong>Fermer avec Échap à la racine :</strong> ferme le terminal lorsque l’historique est vide.</li></ul><h2>Une fenêtre, quatre onglets</h2><p>La configuration, la structure des pages, le thème et la présentation synchronisée partagent une seule fenêtre. Chaque champ est enregistré dès qu’il perd le focus : il n’y a pas de bouton Enregistrer.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-general.webp\" alt=\"L’onglet Général de la fenêtre de configuration du terminal\"></figure><p>L’<strong>ID du terminal</strong> est généré à partir du libellé et reste en lecture seule tant que tu ne cliques pas sur le crayon, pour qu’une macro ou un lien qui le référence déjà ne casse pas par accident.</p><p>Utilise le bouton <strong>Ouvrir</strong> en bas pour tester le terminal avant la partie.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 200000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideConfigure01"
+    },
+    {
+      "_id": "GuideAuthoring01",
+      "name": "3. Rédiger les pages et menus",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Rédiger les pages et menus</h1><h2>Identifiants et hiérarchie</h2><p>Chaque page doit avoir un <strong>ID de page</strong> unique dans son Journal, en minuscules et sans espaces. Le champ <strong>Parent</strong> contient l’ID de la page qui doit l’afficher comme enfant. Le libellé de menu et l’ordre contrôlent son apparence.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/page-sheet-settings.webp\" alt=\"L’onglet Réglages d’une page Terminal, avec l’ID de page, le type et la liste déroulante de page parente\"></figure><p>Le champ <strong>Parent</strong> est une liste déroulante des autres pages du Journal : un identifiant ne peut plus être mal saisi.</p><h2>Menu automatique</h2><p>Affiche les enfants visibles de la page courante :</p><pre><code>::menu children\n::end</code></pre><h2>Menu explicite</h2><p>Un lien local cible un ID de page. Un lien UUID peut cibler une page d’un autre Journal.</p><pre><code>::menu\n[PERSONNEL](terminal:personnel)\n[ARCHIVES](@UUID[JournalEntry.abc.JournalEntryPage.def])\n@UUID[JournalEntry.abc.JournalEntryPage.def]\n@UUID[JournalEntry.abc.JournalEntryPage.def]{ARCHIVES}\n::end</code></pre><p>Un UUID seul prend le nom du document ciblé comme libellé. Le suffixe <code>{Libellé}</code> de Foundry le remplace.</p><h2>Autres directives</h2><ul><li><code>::login</code> crée une saisie de code menant à une page de succès.</li><li><code>::image</code> affiche une image locale au monde ou au module.</li><li><code>::effect glitch</code> présente un bloc avec effet visuel.</li></ul><p>Les titres, paragraphes, listes, emphases, liens et code en ligne sont pris en charge. Le HTML arbitraire et le JavaScript ne le sont pas.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/page-sheet-content.webp\" alt=\"L’onglet Contenu d’une page Terminal avec l’éditeur de balisage pleine hauteur\"></figure><p>Dépose un Journal ou une page sur l’éditeur pour y insérer un lien.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 300000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideAuthoring01"
+    },
+    {
+      "_id": "GuideExample0001",
+      "name": "4. Exemple complet — Console de sécurité",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Exemple complet : console de sécurité d’Orphée</h1><p>Objectif de la scène : les joueurs consultent le personnel, découvrent un mot de passe, ouvrent les archives, puis le MJ révèle un rapport secret au moment approprié.</p><h2>Structure du Journal</h2><table><thead><tr><th>Nom</th><th>ID</th><th>Parent</th><th>État initial</th></tr></thead><tbody><tr><td>Menu principal</td><td><code>main</code></td><td>—</td><td>Visible, disponible</td></tr><tr><td>Dossiers du personnel</td><td><code>personnel</code></td><td><code>main</code></td><td>Visible, disponible</td></tr><tr><td>Archives sécurisées</td><td><code>archives</code></td><td><code>main</code></td><td>Visible, verrouillé par mot de passe</td></tr><tr><td>Incident 1979</td><td><code>incident-1979</code></td><td><code>archives</code></td><td>Masqué, disponible</td></tr></tbody></table><h2>1. Menu principal</h2><p>Type de page : <strong>Menu</strong>.</p><pre><code># CONSOLE DE SÉCURITÉ — STATION ORPHÉE\n\nConnexion établie. Sélectionnez un dossier.\n\n::menu children\n::end</code></pre><h2>2. Dossiers du personnel</h2><p>Libellé de menu : <strong>DOSSIERS DU PERSONNEL</strong>.</p><pre><code># DOSSIERS DU PERSONNEL\n\n- Commandante : Lena Voss\n- Ingénieur : Marc Tannhäuser\n- Médecin : Dr Elise Ward\n\nNote interne : code Omega temporaire ORPHEE-79.</code></pre><h2>3. Archives sécurisées</h2><p>Choisis <strong>Visible + verrouillé</strong>, type <strong>Mot de passe</strong>, secret <code>ORPHEE-79</code> et message d’échec <code>ACCÈS REFUSÉ — NIVEAU OMEGA REQUIS</code>.</p><pre><code># ARCHIVES SÉCURISÉES\n\nAutorisation Omega confirmée.\n\n::menu children\n::end</code></pre><h2>4. Incident 1979</h2><p>Prépare cette page comme <strong>Masquée + disponible</strong>.</p><pre><code># INCIDENT 1979\n\nLe signal ne provenait pas de l’extérieur de la station.\n\nL’émetteur était déjà dans le laboratoire B.</code></pre><h2>Déroulement en partie</h2><ol><li>Les joueurs voient Personnel et Archives; Archives est marqué comme verrouillé.</li><li>Le dossier du personnel leur donne le mot de passe <code>ORPHEE-79</code>.</li><li>Après déverrouillage, la page Archives s’ouvre, mais son menu enfant est vide.</li><li>Au moment dramatique, le MJ ouvre <strong>Structure du terminal</strong> et révèle <code>incident-1979</code>.</li><li>Sans modifier Archives, l’entrée <strong>INCIDENT 1979</strong> apparaît automatiquement la prochaine fois que son menu est affiché.</li></ol><p>Ce même exemple fonctionne en présentation synchronisée : le MJ choisit un contrôleur et tout le groupe observe sa progression sans validation intermédiaire.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 350000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideExample0001"
+    },
+    {
+      "_id": "GuideRelease0001",
+      "name": "5. Révéler, masquer et verrouiller",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Révéler, masquer et verrouiller</h1><p>La <strong>visibilité</strong> et l’<strong>accès</strong> sont deux mécanismes indépendants.</p><table><thead><tr><th>État</th><th>Résultat</th></tr></thead><tbody><tr><td>Masqué</td><td>La page n’apparaît pas dans les menus automatiques et ne peut pas être ouverte par les joueurs.</td></tr><tr><td>Visible + disponible</td><td>La page apparaît et s’ouvre normalement.</td></tr><tr><td>Visible + verrouillé</td><td>La page apparaît avec un verrou et demande son mécanisme d’accès.</td></tr></tbody></table><h2>Types de verrou</h2><ul><li><strong>Aucun :</strong> utile lorsque l’état d’accès est disponible.</li><li><strong>MJ seulement :</strong> seul un MJ peut franchir le verrou.</li><li><strong>Mot de passe :</strong> le joueur doit fournir la valeur configurée.</li></ul><p>L’onglet <strong>Structure</strong> de la configuration du terminal permet de préparer toutes les pages avant la partie, puis de les révéler, masquer, verrouiller ou déverrouiller rapidement pendant la séance. Les menus automatiques se recalculent à chaque affichage.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-structure.webp\" alt=\"L’onglet Structure listant chaque page avec son parent et ses états de visibilité et d’accès\"></figure><p>Évite de placer des secrets dans le nom du Journal ou d’une page visible : le verrou protège l’accès, pas nécessairement tous les libellés exposés par Foundry.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 400000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideRelease0001"
+    },
+    {
+      "_id": "GuidePublish0001",
+      "name": "6. Permissions et publication",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Permissions et publication</h1><h2>Deux contrôles complémentaires</h2><ol><li>Dans les permissions du Journal Foundry, donne <strong>Observateur</strong> aux utilisateurs qui doivent lire le terminal.</li><li>Dans <strong>Configurer le terminal</strong>, active <strong>Publié</strong> pour l’ajouter au lanceur des joueurs.</li></ol><p>Publier ne contourne jamais les permissions. À l’inverse, un Journal lisible mais non publié peut encore être ouvert par son UUID ou par le MJ, mais il n’apparaît pas dans le lanceur.</p><h2>Avant la partie</h2><ul><li>Vérifie les permissions du Journal racine et de toute page liée dans un autre Journal.</li><li>Teste avec un véritable compte joueur : le mode debug MJ peut montrer des pages normalement cachées.</li><li>Utilise l’ordre de publication pour organiser plusieurs terminaux.</li><li>Ne rends publiques que les pages qui doivent être découvertes immédiatement.</li></ul><p>Le contrôle de scène <strong>Terminaux</strong> affiche le lanceur. Un joueur ne voit que les terminaux publiés qu’il a le droit d’observer.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 500000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuidePublish0001"
+    },
+    {
+      "_id": "GuideSync0000001",
+      "name": "7. Présentation synchronisée",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Présentation synchronisée</h1><p>Ce mode donne l’impression que tout le groupe regarde le même écran.</p><ol><li>Ouvre le terminal ou son Journal.</li><li>Choisis <strong>Gérer la synchronisation</strong>.</li><li>Sélectionne un utilisateur connecté comme contrôleur.</li><li>Démarre la session.</li></ol><p>Le contrôleur navigue ensuite librement. Le MJ <strong>ne valide pas chaque action</strong>. Tous les autres utilisateurs voient la même page, la ligne de menu sélectionnée, l’historique Retour/Accueil et les déverrouillages de session. Leurs commandes sont désactivées.</p><h2>Transférer le contrôle</h2><p>Le MJ peut rouvrir la gestion et choisir un autre utilisateur à tout moment. Si le contrôleur se déconnecte, la session reste figée jusqu’au transfert. Une reconnexion récupère le dernier état connu.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-broadcast.webp\" alt=\"L’onglet Diffusion avec la liste des contrôleurs et le bouton de démarrage de la session synchronisée\"></figure><h2>Conditions</h2><ul><li>Une seule session synchronisée peut être active dans le monde.</li><li>Tous les utilisateurs doivent avoir la permission de voir la page affichée.</li><li>Une navigation vers une page cachée ou interdite à un observateur est refusée proprement.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 600000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideSync0000001"
+    },
+    {
+      "_id": "GuideThemes00001",
+      "name": "8. Thèmes et effets",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Thèmes et effets</h1><p>L’apparence se résout du plus général au plus précis :</p><ol><li>thème mondial par défaut;</li><li>thème choisi dans la configuration du terminal;</li><li>remplacement facultatif sur une page;</li><li>personnalisations du terminal.</li></ol><p>L’éditeur de thème permet d’ajuster couleurs, luminosité, contraste, typographie, scanlines, vignettage, bruit et glitch. Préserve un contraste suffisant pour la lecture et teste sur l’écran réellement utilisé pendant la partie.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-theme.webp\" alt=\"L’onglet Thème avec son aperçu CRT en direct au-dessus du sélecteur de préréglage et des curseurs de typographie\"></figure><p>L’aperçu en haut de l’onglet se repeint pendant que tu déplaces un curseur : un rendu se règle sans ouvrir le terminal.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-theme-effects.webp\" alt=\"Les sélecteurs de couleur et la carte d’effet scanlines de l’onglet Thème\"></figure><p>Le réglage client <strong>Effets d’écran</strong> désactive les animations et effets CRT pour l’utilisateur qui en a besoin. Il ne change ni le contenu ni le thème sélectionné pour les autres.</p><p>Utilise les remplacements de page avec parcimonie : ils sont efficaces pour signaler un système différent, une alarme ou une connexion distante, mais trop de variations affaiblissent l’identité d’un terminal.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 700000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideThemes00001"
+    },
+    {
+      "_id": "GuideOperate0001",
+      "name": "9. Utiliser le terminal en partie",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Utiliser le terminal en partie</h1><h2>Commandes clavier</h2><ul><li><strong>Flèches haut/bas :</strong> déplacer la sélection.</li><li><strong>Entrée :</strong> activer l’élément sélectionné.</li><li><strong>1 à 9 :</strong> choisir directement une entrée de menu.</li><li><strong>Échap :</strong> revenir à la page précédente.</li><li><strong>Accueil :</strong> retourner à la page d’accueil.</li></ul><p>La souris reste utilisable. En présentation synchronisée, seul le contrôleur peut activer les commandes.</p><h2>Pendant la séance</h2><ul><li>Garde la fenêtre Structure ouverte pour modifier rapidement les états préparés.</li><li>Révèle une page avant que les joueurs tentent de l’ouvrir si elle doit apparaître dans un menu automatique.</li><li>Les déverrouillages sont temporaires à la session du terminal; ils ne modifient pas l’état éditorial de la page.</li><li>Les liens UUID permettent de traverser vers un autre Journal, mais ses permissions s’appliquent toujours.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 800000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideOperate0001"
+    },
+    {
+      "_id": "GuideChecklist01",
+      "name": "10. Checklist avant la partie",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Checklist avant la partie</h1><ul><li>☐ Le Journal contient une page d’accueil valide.</li><li>☐ Tous les IDs de page sont uniques et les parents utilisent ces IDs.</li><li>☐ Les menus et les liens UUID ont été prévisualisés.</li><li>☐ Les pages secrètes sont masquées ou verrouillées selon l’effet désiré.</li><li>☐ Aucun secret ne se trouve dans un libellé visible.</li><li>☐ Le Journal et les Journaux liés ont les bonnes permissions Observateur.</li><li>☐ Le terminal est activé et publié si les joueurs doivent le trouver eux-mêmes.</li><li>☐ Le thème reste lisible avec les effets activés et désactivés.</li><li>☐ Un test a été fait avec un compte joueur.</li><li>☐ Pour une présentation synchronisée, le contrôleur prévu est connecté.</li></ul><p>Une préparation robuste consiste à créer tout le contenu à l’avance, le laisser masqué, puis utiliser la fenêtre Structure pour orchestrer sa découverte.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 900000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideChecklist01"
+    },
+    {
+      "_id": "GuideTrouble0001",
+      "name": "11. Dépannage",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Dépannage</h1><h2>Le terminal n’apparaît pas dans le lanceur</h2><p>Vérifie qu’il est activé, publié, qu’il contient une page d’accueil et que le joueur possède la permission Observateur sur le Journal.</p><h2>Une page manque dans un menu automatique</h2><p>Vérifie son ID, le champ Parent, l’option d’affichage dans le menu parent, sa visibilité et les permissions Foundry.</p><h2>« Fichier indisponible »</h2><p>La cible est absente, cachée, interdite à l’utilisateur ou l’UUID est périmé. Ouvre la fenêtre Structure et corrige les diagnostics signalés.</p><h2>La synchronisation refuse de démarrer ou de naviguer</h2><p>Au moins un utilisateur du monde ne peut pas voir le Journal ou la page cible. Harmonise les permissions avant de relancer.</p><h2>Les changements de code ne semblent pas chargés</h2><p>Recharge le monde après une modification du manifeste ou du Compendium. Pendant le développement, reconstruis le pack avec <code>npm run build:packs</code>. Pour une release, le workflow reconstruit automatiquement le Compendium et le bundle minifié.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 1000000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideFR0001.GuideTrouble0001"
+    }
+  ],
+  "folder": null,
+  "flags": {
+    "retro-crt-terminal": {
+      "language": "fr"
+    }
+  },
+  "sort": 100000,
+  "ownership": {
+    "default": 0
+  },
+  "categories": [],
+  "_key": "!journal!RetroGuideFR0001"
+}

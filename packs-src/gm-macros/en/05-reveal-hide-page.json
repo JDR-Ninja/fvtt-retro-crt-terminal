@@ -1,0 +1,14 @@
+{
+  "_id": "MacroEnReveal001",
+  "name": "05 — Reveal or Hide a Page",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/light.svg",
+  "scope": "global",
+  "command": "/**\n * REVEAL OR HIDE A TERMINAL PAGE\n *\n * PAGE_UUID must identify a Terminal page imported into the world.\n * MODE accepts three values:\n *   \"show\"   : make the page visible;\n *   \"hide\"   : hide the page;\n *   \"toggle\" : reverse its current state.\n *\n * A hidden page disappears from automatic player menus. Its content is not\n * deleted and can be revealed again with the same macro.\n */\n\n// ── CONFIGURATION TO EDIT ─────────────────────────────────────\nconst PAGE_UUID = \"JournalEntry.REPLACE_ME.JournalEntryPage.REPLACE_ME\";\nconst MODE = \"toggle\"; // \"show\", \"hide\", or \"toggle\"\n// ──────────────────────────────────────────────────────────────\n\nif (!game.user.isGM) return ui.notifications.error(\"This macro is for the GM only.\");\nif (!game.modules.get(\"retro-crt-terminal\")?.active) {\n  return ui.notifications.error(\"Retro CRT Terminal is not active.\");\n}\nif (!PAGE_UUID || PAGE_UUID.includes(\"REPLACE_ME\")) {\n  return ui.notifications.warn(\"Edit PAGE_UUID in the macro configuration.\");\n}\nif (![\"show\", \"hide\", \"toggle\"].includes(MODE)) {\n  return ui.notifications.error(\"MODE must be show, hide, or toggle.\");\n}\n\nconst page = await foundry.utils.fromUuid(PAGE_UUID);\nif (page?.documentName !== \"JournalEntryPage\" || page.type !== \"retro-crt-terminal.terminal\") {\n  return ui.notifications.error(\"PAGE_UUID does not identify a Retro CRT Terminal page.\");\n}\n\nconst current = page.system.release.visibility;\nconst visibility = MODE === \"show\" ? \"visible\" : MODE === \"hide\" ? \"hidden\" : current === \"hidden\" ? \"visible\" : \"hidden\";\nawait page.update({ \"system.release.visibility\": visibility });\nui.notifications.info(`${page.name} is now ${visibility}.`);",
+  "folder": "MacroFolderEN001",
+  "sort": 500000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "en" } },
+  "_key": "!macros!MacroEnReveal001"
+}

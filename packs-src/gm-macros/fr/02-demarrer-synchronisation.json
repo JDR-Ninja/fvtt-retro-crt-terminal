@@ -1,0 +1,14 @@
+{
+  "_id": "MacroFrStart0001",
+  "name": "02 — Démarrer la présentation synchronisée",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/eye.svg",
+  "scope": "global",
+  "command": "/**\n * DÉMARRER UNE PRÉSENTATION SYNCHRONISÉE\n *\n * Tous les utilisateurs du monde observeront le même terminal. Le contrôleur\n * choisi navigue librement; le MJ n’a pas à confirmer chaque action.\n *\n * TERMINAL_UUID : UUID du Journal Terminal à présenter.\n * CONTROLLER : nom exact ou ID d’un utilisateur connecté. Une chaîne vide\n * utilise le MJ qui exécute la macro.\n *\n * Important : tous les utilisateurs doivent avoir la permission Observateur\n * sur le Journal et pouvoir voir sa page d’accueil.\n */\n\n// ── CONFIGURATION À MODIFIER ──────────────────────────────────\nconst TERMINAL_UUID = \"JournalEntry.REMPLACEZ_MOI\";\nconst CONTROLLER = \"\"; // Exemple : \"Alice\" ou \"abc123UserId\"\n// ──────────────────────────────────────────────────────────────\n\nif (!game.user.isGM) return ui.notifications.error(\"Cette macro est réservée au MJ.\");\nconst api = game.modules.get(\"retro-crt-terminal\")?.api;\nif (!api) return ui.notifications.error(\"Retro CRT Terminal n’est pas actif.\");\nif (!TERMINAL_UUID || TERMINAL_UUID.includes(\"REMPLACEZ_MOI\")) {\n  return ui.notifications.warn(\"Modifiez TERMINAL_UUID dans la configuration de la macro.\");\n}\n\nconst controller = CONTROLLER\n  ? game.users.get(CONTROLLER) ?? game.users.find(user => user.name === CONTROLLER)\n  : game.user;\nif (!controller) return ui.notifications.error(`Utilisateur introuvable : ${CONTROLLER}`);\nif (!controller.active) return ui.notifications.error(`${controller.name} n’est pas connecté.`);\n\nawait api.shared.start({\n  terminalRootUuid: TERMINAL_UUID,\n  controllerUserId: controller.id\n});\nui.notifications.info(`Présentation démarrée — contrôle : ${controller.name}`);",
+  "folder": "MacroFolderFR001",
+  "sort": 200000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "fr" } },
+  "_key": "!macros!MacroFrStart0001"
+}

@@ -1,0 +1,99 @@
+{
+  "_id": "TplEnMenu0000001",
+  "name": "Template 01 — Simple Menu",
+  "pages": [
+    {
+      "_id": "TplEnMenuMain001",
+      "name": "Main Menu",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# INFORMATION TERMINAL\n\nConnection established. Select a section.\n\n::menu children\n::end",
+        "pageId": "main",
+        "pageType": "menu",
+        "navigation": { "label": "MAIN MENU", "parent": "", "sort": 0, "showInParentMenu": false },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCESS DENIED" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 100000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplEnMenu0000001.TplEnMenuMain001"
+    },
+    {
+      "_id": "TplEnMenuStatus1",
+      "name": "System Status",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# SYSTEM STATUS\n\n- Power: STABLE\n- Network: ONLINE\n- External access: DISABLED\n\nLast check: 08:42.",
+        "pageId": "status",
+        "pageType": "system",
+        "navigation": { "label": "SYSTEM STATUS", "parent": "main", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCESS DENIED" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 200000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplEnMenu0000001.TplEnMenuStatus1"
+    },
+    {
+      "_id": "TplEnMenuFiles01",
+      "name": "Public Files",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# PUBLIC FILES\n\nIndex of available documents.\n\n::menu children\n::end",
+        "pageId": "public-files",
+        "pageType": "directory",
+        "navigation": { "label": "PUBLIC FILES", "parent": "main", "sort": 200, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCESS DENIED" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 300000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplEnMenu0000001.TplEnMenuFiles01"
+    },
+    {
+      "_id": "TplEnMenuFile001",
+      "name": "Welcome Note",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# WELCOME NOTE\n\nWelcome aboard.\n\nReplace this text with a report, location brief, or any other document the players can consult freely.",
+        "pageId": "welcome-note",
+        "pageType": "document",
+        "navigation": { "label": "WELCOME NOTE", "parent": "public-files", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCESS DENIED" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 400000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplEnMenu0000001.TplEnMenuFile001"
+    }
+  ],
+  "folder": "TplFolderEN00001",
+  "flags": {
+    "retro-crt-terminal": {
+      "template": true,
+      "templateLanguage": "en",
+      "terminal": {
+        "enabled": true,
+        "terminalId": "template-simple-menu",
+        "label": "Template — Simple Menu",
+        "startPageUuid": "",
+        "themeId": "green-crt",
+        "themeOverrides": {},
+        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-computer", "audience": "observers" },
+        "behavior": { "rememberPage": false, "showBootSequence": true, "closeOnEscapeAtRoot": false }
+      }
+    }
+  },
+  "sort": 100000,
+  "ownership": { "default": 0 },
+  "categories": [],
+  "_key": "!journal!TplEnMenu0000001"
+}

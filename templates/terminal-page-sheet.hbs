@@ -1,0 +1,101 @@
+<div class="page-sheet-form">
+  <header class="page-sheet-toolbar">
+    <nav class="terminal-config-tabs" role="tablist">
+      {{#each tabs}}
+        <button type="button" class="config-tab-link {{#if active}}active{{/if}}" role="tab" aria-selected="{{active}}" data-action="selectTab" data-tab="{{id}}">
+          <i class="{{icon}}" aria-hidden="true"></i>
+          <span>{{localize label}}</span>
+        </button>
+      {{/each}}
+    </nav>
+    <div class="page-sheet-quick-actions">
+      <button type="button" class="icon-button" data-action="preview" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.Preview'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.Preview'}}"><i class="fa-solid fa-display" aria-hidden="true"></i></button>
+      {{#if editable}}
+        <button type="button" class="icon-button" data-action="reveal" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.Reveal'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.Reveal'}}"><i class="fa-solid fa-eye" aria-hidden="true"></i></button>
+        <button type="button" class="icon-button" data-action="hide" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.Hide'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.Hide'}}"><i class="fa-solid fa-eye-slash" aria-hidden="true"></i></button>
+        <button type="button" class="icon-button" data-action="lock" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.Lock'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.Lock'}}"><i class="fa-solid fa-lock" aria-hidden="true"></i></button>
+        <button type="button" class="icon-button" data-action="unlock" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.Unlock'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.Unlock'}}"><i class="fa-solid fa-lock-open" aria-hidden="true"></i></button>
+      {{/if}}
+    </div>
+  </header>
+
+  <section class="tab {{#if tabs.0.active}}active{{/if}}" data-tab="content">
+    <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+      <div class="form-group">
+        <label for="{{rootId}}-name">{{localize "RETRO_CRT_TERMINAL.Fields.Name"}}</label>
+        <div class="form-fields">
+          <input id="{{rootId}}-name" type="text" name="name" value="{{page.name}}" required>
+        </div>
+      </div>
+      <div class="form-group source-field">
+        <label for="{{rootId}}-source">{{localize "RETRO_CRT_TERMINAL.Fields.Source"}}</label>
+        <div class="form-fields">
+          <textarea id="{{rootId}}-source" name="system.source" spellcheck="false">{{system.source}}</textarea>
+        </div>
+        <p class="hint">{{localize "RETRO_CRT_TERMINAL.PageSheet.DropHint"}}</p>
+      </div>
+    </fieldset>
+  </section>
+
+  <section class="tab {{#if tabs.1.active}}active{{/if}}" data-tab="settings">
+    <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+      <legend>{{localize "RETRO_CRT_TERMINAL.PageSheet.Sections.Identity"}}</legend>
+      {{formGroup fields.pageId value=system.pageId name="system.pageId" localize=true}}
+      {{formGroup fields.pageType value=system.pageType name="system.pageType" localize=true}}
+    </fieldset>
+
+    <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+      <legend>{{localize "RETRO_CRT_TERMINAL.PageSheet.Sections.Navigation"}}</legend>
+      {{formGroup fields.navigation.fields.label value=system.navigation.label name="system.navigation.label" localize=true}}
+      <div class="form-group">
+        <label for="{{rootId}}-parent">{{localize "RETRO_CRT_TERMINAL.Fields.Parent"}}</label>
+        <div class="form-fields">
+          <select id="{{rootId}}-parent" name="system.navigation.parent">
+            <option value="">{{localize "RETRO_CRT_TERMINAL.Fields.NoParent"}}</option>
+            {{#each parents}}<option value="{{pageId}}" {{#if selected}}selected{{/if}}>{{name}} — {{pageId}}</option>{{/each}}
+          </select>
+        </div>
+        <p class="hint">{{localize "RETRO_CRT_TERMINAL.Hints.Parent"}}</p>
+      </div>
+      {{formGroup fields.navigation.fields.sort value=system.navigation.sort name="system.navigation.sort" localize=true}}
+      {{formGroup fields.navigation.fields.showInParentMenu value=system.navigation.showInParentMenu name="system.navigation.showInParentMenu" localize=true}}
+    </fieldset>
+
+    <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+      <legend>{{localize "RETRO_CRT_TERMINAL.PageSheet.Sections.Release"}}</legend>
+      {{formGroup fields.release.fields.visibility value=system.release.visibility name="system.release.visibility" localize=true}}
+      {{formGroup fields.release.fields.access value=system.release.access name="system.release.access" localize=true}}
+      {{formGroup fields.lock.fields.type value=system.lock.type name="system.lock.type" localize=true}}
+      <div class="form-group">
+        <label for="{{rootId}}-secret">{{localize "RETRO_CRT_TERMINAL.Fields.Password"}}</label>
+        <div class="form-fields secret-field">
+          <input id="{{rootId}}-secret" type="password" name="system.lock.secret" value="{{system.lock.secret}}" autocomplete="off" spellcheck="false">
+          <button type="button" class="icon-button" data-action="toggleSecret" data-tooltip="{{localize 'RETRO_CRT_TERMINAL.Actions.RevealPassword'}}" aria-label="{{localize 'RETRO_CRT_TERMINAL.Actions.RevealPassword'}}">
+            <i class="fa-solid fa-eye" aria-hidden="true"></i>
+          </button>
+        </div>
+        <p class="hint">{{localize "RETRO_CRT_TERMINAL.Hints.Password"}}</p>
+      </div>
+      {{formGroup fields.lock.fields.failureMessage value=system.lock.failureMessage name="system.lock.failureMessage" localize=true}}
+    </fieldset>
+
+    <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+      <legend>{{localize "RETRO_CRT_TERMINAL.PageSheet.Sections.Presentation"}}</legend>
+      <div class="form-group">
+        <label for="{{rootId}}-themeOverride">{{localize "RETRO_CRT_TERMINAL.Fields.ThemeOverride"}}</label>
+        <div class="form-fields">
+          <select id="{{rootId}}-themeOverride" name="system.presentation.themeOverride">
+            {{#each themes}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+          </select>
+        </div>
+        <p class="hint">{{localize "RETRO_CRT_TERMINAL.Hints.ThemeOverride"}}</p>
+      </div>
+    </fieldset>
+  </section>
+
+  {{#if editable}}
+    <footer class="config-footer">
+      <button type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.Save"}}</button>
+    </footer>
+  {{/if}}
+</div>

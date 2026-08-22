@@ -1,0 +1,14 @@
+{
+  "_id": "MacroFrStop00001",
+  "name": "04 — Arrêter la présentation synchronisée",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/cancel.svg",
+  "scope": "global",
+  "command": "/**\n * ARRÊTER LA PRÉSENTATION SYNCHRONISÉE\n *\n * Cette macro termine la session partagée active et ferme le terminal partagé\n * pour les participants. Elle ne supprime ni Journal, ni page, ni configuration.\n * Aucune valeur n’est à modifier.\n */\n\n// ── CONFIGURATION ─────────────────────────────────────────────\n// Aucune : cette macro agit sur la présentation active.\n// ──────────────────────────────────────────────────────────────\n\nif (!game.user.isGM) return ui.notifications.error(\"Cette macro est réservée au MJ.\");\nconst api = game.modules.get(\"retro-crt-terminal\")?.api;\nif (!api) return ui.notifications.error(\"Retro CRT Terminal n’est pas actif.\");\nif (!api.shared.state?.active) return ui.notifications.warn(\"Aucune présentation synchronisée n’est active.\");\n\nawait api.shared.stop();\nui.notifications.info(\"Présentation synchronisée arrêtée.\");",
+  "folder": "MacroFolderFR001",
+  "sort": 400000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "fr" } },
+  "_key": "!macros!MacroFrStop00001"
+}

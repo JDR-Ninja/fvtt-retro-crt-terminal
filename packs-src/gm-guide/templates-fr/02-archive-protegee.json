@@ -1,0 +1,99 @@
+{
+  "_id": "TplFrLock0000001",
+  "name": "Modèle 02 — Archive protégée",
+  "pages": [
+    {
+      "_id": "TplFrLockMain001",
+      "name": "Console d’accès",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# CONSOLE D’ACCÈS\n\nAuthentification locale disponible.\n\n::menu children\n::end",
+        "pageId": "main",
+        "pageType": "menu",
+        "navigation": { "label": "CONSOLE D’ACCÈS", "parent": "", "sort": 0, "showInParentMenu": false },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 100000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrLock0000001.TplFrLockMain001"
+    },
+    {
+      "_id": "TplFrLockClue001",
+      "name": "Note de maintenance",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# NOTE DE MAINTENANCE\n\nLe code temporaire des archives est **AURORA-7**.\n\nChangez ce code et cette piste pour les adapter à votre scénario.",
+        "pageId": "maintenance-note",
+        "pageType": "document",
+        "navigation": { "label": "NOTE DE MAINTENANCE", "parent": "main", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 200000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrLock0000001.TplFrLockClue001"
+    },
+    {
+      "_id": "TplFrLockVault01",
+      "name": "Archives sécurisées",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# ARCHIVES SÉCURISÉES\n\nAutorisation confirmée.\n\n::menu children\n::end",
+        "pageId": "secure-archives",
+        "pageType": "directory",
+        "navigation": { "label": "ARCHIVES SÉCURISÉES", "parent": "main", "sort": 200, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "locked" },
+        "lock": { "type": "password", "secret": "AURORA-7", "failureMessage": "CODE INVALIDE — ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 300000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrLock0000001.TplFrLockVault01"
+    },
+    {
+      "_id": "TplFrLockReport1",
+      "name": "Rapport confidentiel",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# RAPPORT CONFIDENTIEL\n\nSujet : [REMPLACEZ CE TITRE]\n\nLe contenu protégé de votre scénario va ici. Le mot de passe déverrouille les archives pour la session du terminal.",
+        "pageId": "confidential-report",
+        "pageType": "document",
+        "navigation": { "label": "RAPPORT CONFIDENTIEL", "parent": "secure-archives", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 400000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrLock0000001.TplFrLockReport1"
+    }
+  ],
+  "folder": "TplFolderFR00001",
+  "flags": {
+    "retro-crt-terminal": {
+      "template": true,
+      "templateLanguage": "fr",
+      "terminal": {
+        "enabled": true,
+        "terminalId": "modele-archive-protegee",
+        "label": "Modèle — Archive protégée",
+        "startPageUuid": "",
+        "themeId": "amber-crt",
+        "themeOverrides": {},
+        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-lock", "audience": "observers" },
+        "behavior": { "rememberPage": false, "showBootSequence": true, "closeOnEscapeAtRoot": false }
+      }
+    }
+  },
+  "sort": 200000,
+  "ownership": { "default": 0 },
+  "categories": [],
+  "_key": "!journal!TplFrLock0000001"
+}

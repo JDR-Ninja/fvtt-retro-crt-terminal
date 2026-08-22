@@ -1,0 +1,315 @@
+{
+  "_id": "RetroGuideEN0001",
+  "name": "Retro CRT Terminal — Gamemaster Guide",
+  "pages": [
+    {
+      "_id": "GuideQuickStart1",
+      "name": "1. Quick Start",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Quick Start</h1><p>This path produces a working first terminal in a few minutes.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/terminal-in-play.webp\" alt=\"A finished terminal in play: the Orpheus Station security console with a highlighted menu row and a locked entry\"></figure><p><strong>Fastest option:</strong> open the <em>Français — Modèles</em> or <em>English — Templates</em> folder in this Compendium, import a Journal into the world, then rename it and assign a unique terminal ID before publishing it.</p><ol><li>Create a Foundry <strong>Journal</strong>.</li><li>Add a page of the <strong>Terminal</strong> type and name it <em>Main Menu</em>.</li><li>Give it the page ID <code>main</code>.</li><li>Write a heading, a short message, and an automatic menu in its source.</li><li>From the Journal header, open <strong>Configure Terminal</strong>, choose this page as Home, and enable <strong>Published</strong>.</li><li>Grant the group <strong>Observer</strong> ownership on the Journal.</li><li>Open the <strong>Terminals</strong> Scene Control and test with a player account.</li></ol><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/journal-header-menu.webp\" alt=\"The Journal header menu, opened with the three-dot button, listing Configure Terminal, Terminal Structure and Manage synchronization\"></figure><p>Every module action lives in the Journal header menu, behind the <strong>⋮</strong> button.</p><pre><code># CENTRAL TERMINAL\n\nSystem online.\n\n::menu children\n::end</code></pre><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/launcher.webp\" alt=\"The Terminals scene control selected in the left toolbar, with the launcher listing a published terminal\"></figure><p>The <strong>Terminals</strong> Scene Control opens the launcher your players will use.</p><p><strong>Important:</strong> publication makes a terminal discoverable in the launcher, while Foundry permissions determine who can actually read it.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 100000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideQuickStart1"
+    },
+    {
+      "_id": "GuideConfigure01",
+      "name": "2. Create and Configure",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Create and Configure a Terminal</h1><h2>The root Journal</h2><p>A terminal is a Journal containing one or more Terminal pages. Keep pages belonging to the same fictional device in one Journal.</p><h2>Identity</h2><ul><li><strong>Enabled:</strong> allows the terminal to be used.</li><li><strong>Terminal ID:</strong> a short, stable, unique identifier such as <code>security-console</code>.</li><li><strong>Label:</strong> the name presented to players.</li><li><strong>Home page:</strong> the page opened at launch and with the Home key.</li><li><strong>Theme:</strong> the terminal’s general appearance.</li></ul><h2>Behavior</h2><ul><li><strong>Remember page:</strong> each user resumes their last page in individual mode.</li><li><strong>Boot sequence:</strong> plays the CRT animation when opened.</li><li><strong>Close with Escape at root:</strong> closes the terminal when history is empty.</li></ul><h2>One window, four tabs</h2><p>Configuration, page structure, theme, and synchronized presentation share a single window. Changes are saved as soon as a field loses focus, so there is no Save button.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-general.webp\" alt=\"The General tab of the terminal configuration window\"></figure><p>The <strong>Terminal ID</strong> is generated from the label and stays read-only until you click the pencil, so a macro or link that already points at it cannot break by accident.</p><p>Use the <strong>Open</strong> button at the bottom to test the terminal before play.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 200000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideConfigure01"
+    },
+    {
+      "_id": "GuideAuthoring01",
+      "name": "3. Write Pages and Menus",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Write Pages and Menus</h1><h2>IDs and hierarchy</h2><p>Every page needs a unique lowercase <strong>Page ID</strong> without spaces. The <strong>Parent</strong> field contains the ID of the page that should list it as a child. Menu label and sort order control its presentation.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/page-sheet-settings.webp\" alt=\"The Settings tab of a Terminal page sheet, showing the page ID, page type and the parent page dropdown\"></figure><p>The <strong>Parent</strong> field is a dropdown listing the other pages of the Journal, so an ID can never be mistyped.</p><h2>Automatic menu</h2><p>Lists the visible children of the current page:</p><pre><code>::menu children\n::end</code></pre><h2>Explicit menu</h2><p>A local link targets a page ID. A UUID link can target a page in another Journal.</p><pre><code>::menu\n[PERSONNEL](terminal:personnel)\n[ARCHIVES](@UUID[JournalEntry.abc.JournalEntryPage.def])\n@UUID[JournalEntry.abc.JournalEntryPage.def]\n@UUID[JournalEntry.abc.JournalEntryPage.def]{ARCHIVES}\n::end</code></pre><p>A bare UUID takes the target document's own name as its label. Foundry's <code>{Label}</code> suffix overrides it.</p><h2>Other directives</h2><ul><li><code>::login</code> creates a code input leading to a success page.</li><li><code>::image</code> displays an image stored in the world or module.</li><li><code>::effect glitch</code> presents a block with a visual effect.</li></ul><p>Headings, paragraphs, lists, emphasis, links, and inline code are supported. Arbitrary HTML and JavaScript are not.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/page-sheet-content.webp\" alt=\"The Content tab of a Terminal page sheet with the full-height markup editor\"></figure><p>Drop a Journal or a page onto the editor to insert a link to it.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 300000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideAuthoring01"
+    },
+    {
+      "_id": "GuideExample0001",
+      "name": "4. Complete Example — Security Console",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Complete Example: Orpheus Security Console</h1><p>Scene objective: the players inspect personnel files, discover a password, open the archives, and then the GM reveals a secret report at the right moment.</p><h2>Journal structure</h2><table><thead><tr><th>Name</th><th>ID</th><th>Parent</th><th>Initial state</th></tr></thead><tbody><tr><td>Main Menu</td><td><code>main</code></td><td>—</td><td>Visible, available</td></tr><tr><td>Personnel Files</td><td><code>personnel</code></td><td><code>main</code></td><td>Visible, available</td></tr><tr><td>Secure Archives</td><td><code>archives</code></td><td><code>main</code></td><td>Visible, password locked</td></tr><tr><td>Incident 1979</td><td><code>incident-1979</code></td><td><code>archives</code></td><td>Hidden, available</td></tr></tbody></table><h2>1. Main Menu</h2><p>Page type: <strong>Menu</strong>.</p><pre><code># SECURITY CONSOLE — ORPHEUS STATION\n\nConnection established. Select a file.\n\n::menu children\n::end</code></pre><h2>2. Personnel Files</h2><p>Menu label: <strong>PERSONNEL FILES</strong>.</p><pre><code># PERSONNEL FILES\n\n- Commander: Lena Voss\n- Engineer: Marc Tannhäuser\n- Physician: Dr Elise Ward\n\nInternal note: temporary Omega code ORPHEUS-79.</code></pre><h2>3. Secure Archives</h2><p>Choose <strong>Visible + locked</strong>, lock type <strong>Password</strong>, secret <code>ORPHEUS-79</code>, and failure message <code>ACCESS DENIED — OMEGA CLEARANCE REQUIRED</code>.</p><pre><code># SECURE ARCHIVES\n\nOmega authorization confirmed.\n\n::menu children\n::end</code></pre><h2>4. Incident 1979</h2><p>Prepare this page as <strong>Hidden + available</strong>.</p><pre><code># INCIDENT 1979\n\nThe signal did not originate outside the station.\n\nThe transmitter was already inside Laboratory B.</code></pre><h2>Running the scene</h2><ol><li>Players see Personnel and Archives; Archives is marked as locked.</li><li>The personnel file gives them the password <code>ORPHEUS-79</code>.</li><li>After unlocking, Archives opens, but its child menu is empty.</li><li>At the dramatic moment, the GM opens <strong>Terminal Structure</strong> and reveals <code>incident-1979</code>.</li><li>Without editing Archives, <strong>INCIDENT 1979</strong> automatically appears the next time its menu is displayed.</li></ol><p>The same example works in synchronized presentation: the GM selects one controller and the whole group watches their progress without intermediate approval.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 350000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideExample0001"
+    },
+    {
+      "_id": "GuideRelease0001",
+      "name": "5. Reveal, Hide, and Lock",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Reveal, Hide, and Lock</h1><p><strong>Visibility</strong> and <strong>access</strong> are independent mechanisms.</p><table><thead><tr><th>State</th><th>Result</th></tr></thead><tbody><tr><td>Hidden</td><td>The page is omitted from automatic menus and cannot be opened by players.</td></tr><tr><td>Visible + available</td><td>The page appears and opens normally.</td></tr><tr><td>Visible + locked</td><td>The page appears with a lock and asks for its access method.</td></tr></tbody></table><h2>Lock types</h2><ul><li><strong>None:</strong> appropriate when access is available.</li><li><strong>GM only:</strong> only a GM can pass the lock.</li><li><strong>Password:</strong> the player must enter the configured value.</li></ul><p>The <strong>Structure</strong> tab of the terminal configuration lets you prepare every page before play, then reveal, hide, lock, or unlock it quickly during the session. Automatic menus are recalculated whenever displayed.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-structure.webp\" alt=\"The Structure tab listing every page with its parent and its visibility and access state\"></figure><p>Avoid placing secrets in the name of a Journal or visible page: a lock protects access, but not necessarily every label exposed by Foundry.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 400000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideRelease0001"
+    },
+    {
+      "_id": "GuidePublish0001",
+      "name": "6. Permissions and Publication",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Permissions and Publication</h1><h2>Two complementary controls</h2><ol><li>In Foundry Journal permissions, grant <strong>Observer</strong> to users who should read the terminal.</li><li>In <strong>Configure Terminal</strong>, enable <strong>Published</strong> to add it to the player launcher.</li></ol><p>Publication never bypasses permissions. Conversely, a readable but unpublished Journal can still be opened by UUID or by the GM, but does not appear in the launcher.</p><h2>Before play</h2><ul><li>Check permissions on the root Journal and every page linked from another Journal.</li><li>Test with an actual player account: GM debug mode can expose normally hidden pages.</li><li>Use publication sort order to organize multiple terminals.</li><li>Only make pages public when they should be immediately discoverable.</li></ul><p>The <strong>Terminals</strong> Scene Control opens the launcher. A player only sees published terminals they are permitted to observe.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 500000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuidePublish0001"
+    },
+    {
+      "_id": "GuideSync0000001",
+      "name": "7. Synchronized Presentation",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Synchronized Presentation</h1><p>This mode makes the group feel as though everyone is watching the same screen.</p><ol><li>Open the terminal or its Journal.</li><li>Choose <strong>Manage synchronization</strong>.</li><li>Select one connected user as controller.</li><li>Start the session.</li></ol><p>The controller then navigates freely. The GM <strong>does not approve each action</strong>. Every other user sees the same page, selected menu row, Back/Home history, and session unlocks. Their controls are disabled.</p><h2>Transfer control</h2><p>The GM can reopen management and select another user at any time. If the controller disconnects, the session remains frozen until control is transferred. Reconnecting restores the latest known state.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-broadcast.webp\" alt=\"The Broadcast tab with the controller dropdown and the Start synchronized session button\"></figure><h2>Requirements</h2><ul><li>Only one synchronized session can be active in the world.</li><li>Every user must be permitted to view the displayed page.</li><li>Navigation to a page hidden from or forbidden to an observer is safely rejected.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 600000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideSync0000001"
+    },
+    {
+      "_id": "GuideThemes00001",
+      "name": "8. Themes and Effects",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Themes and Effects</h1><p>Appearance resolves from the broadest level to the most specific:</p><ol><li>world default theme;</li><li>theme selected in terminal configuration;</li><li>optional page override;</li><li>terminal customizations.</li></ol><p>The Theme Editor adjusts colors, brightness, contrast, typography, scanlines, vignette, noise, and glitch. Maintain sufficient reading contrast and test on the display used during play.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-theme.webp\" alt=\"The Theme tab with its live CRT preview above the preset selector and typography sliders\"></figure><p>The preview at the top of the tab repaints as you drag a control, so a look can be dialled in without opening the terminal.</p><figure class=\"rct-shot\"><img src=\"modules/retro-crt-terminal/assets/screenshots/config-theme-effects.webp\" alt=\"The colour swatches and the scanline effect card of the Theme tab\"></figure><p>The client-side <strong>Screen effects</strong> setting disables CRT animations and effects for a user who needs it. It changes neither content nor the theme selected for anyone else.</p><p>Use page overrides sparingly. They work well to signal a different system, an alarm, or a remote connection, but too much variation weakens a terminal’s identity.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 700000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideThemes00001"
+    },
+    {
+      "_id": "GuideOperate0001",
+      "name": "9. Operate During Play",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Operate During Play</h1><h2>Keyboard controls</h2><ul><li><strong>Up/Down:</strong> move the selection.</li><li><strong>Enter:</strong> activate the selected element.</li><li><strong>1 through 9:</strong> select a menu entry directly.</li><li><strong>Escape:</strong> return to the previous page.</li><li><strong>Home:</strong> return to the home page.</li></ul><p>The mouse remains available. During synchronized presentation, only the controller can activate commands.</p><h2>During the session</h2><ul><li>Keep the Structure window open to change prepared states quickly.</li><li>Reveal a page before players try to open it if it should appear in an automatic menu.</li><li>Session unlocks are temporary to that terminal session; they do not change the page’s editorial state.</li><li>UUID links can cross into another Journal, but its permissions always apply.</li></ul>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 800000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideOperate0001"
+    },
+    {
+      "_id": "GuideChecklist01",
+      "name": "10. Pre-session Checklist",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Pre-session Checklist</h1><ul><li>☐ The Journal has a valid home page.</li><li>☐ Every page ID is unique and parent fields use those IDs.</li><li>☐ Menus and UUID links have been previewed.</li><li>☐ Secret pages are hidden or locked for the intended effect.</li><li>☐ No secret appears in a visible label.</li><li>☐ The Journal and linked Journals grant the correct Observer permissions.</li><li>☐ The terminal is enabled and published if players should find it themselves.</li><li>☐ The theme remains readable with effects enabled and disabled.</li><li>☐ Testing was performed with a player account.</li><li>☐ For synchronized presentation, the intended controller is connected.</li></ul><p>A robust workflow is to create all content ahead of time, leave it hidden, then use the Structure window to orchestrate its discovery.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 900000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideChecklist01"
+    },
+    {
+      "_id": "GuideTrouble0001",
+      "name": "11. Troubleshooting",
+      "type": "text",
+      "text": {
+        "format": 1,
+        "content": "<h1>Troubleshooting</h1><h2>The terminal does not appear in the launcher</h2><p>Confirm it is enabled and published, has a home page, and the player has Observer permission on the Journal.</p><h2>A page is missing from an automatic menu</h2><p>Check its ID, Parent field, parent-menu option, visibility, and Foundry permissions.</p><h2>“File unavailable”</h2><p>The target is missing, hidden, forbidden to the user, or its UUID is stale. Open the Structure window and correct reported diagnostics.</p><h2>Synchronization refuses to start or navigate</h2><p>At least one world user cannot see the Journal or target page. Align permissions before trying again.</p><h2>Code changes do not appear loaded</h2><p>Reload the world after changing the manifest or Compendium. During development, rebuild the pack with <code>npm run build:packs</code>. For a release, the workflow automatically rebuilds both the Compendium and minified bundle.</p>"
+      },
+      "title": {
+        "show": true,
+        "level": 1
+      },
+      "image": {},
+      "video": {
+        "controls": true,
+        "volume": 0.5
+      },
+      "src": null,
+      "system": {},
+      "sort": 1000000,
+      "ownership": {
+        "default": -1
+      },
+      "flags": {},
+      "category": null,
+      "_key": "!journal.pages!RetroGuideEN0001.GuideTrouble0001"
+    }
+  ],
+  "folder": null,
+  "flags": {
+    "retro-crt-terminal": {
+      "language": "en"
+    }
+  },
+  "sort": 200000,
+  "ownership": {
+    "default": 0
+  },
+  "categories": [],
+  "_key": "!journal!RetroGuideEN0001"
+}

@@ -1,0 +1,58 @@
+{
+  "id": "retro-crt-terminal",
+  "title": "Retro CRT Terminal",
+  "description": "Create, publish, theme, lock, and progressively reveal keyboard-driven CRT terminals using Journal Entry pages.",
+  "version": "0.1.0",
+  "url": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal",
+  "manifest": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/releases/latest/download/module.json",
+  "download": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/releases/download/v0.1.0/retro-crt-terminal.zip",
+  "socket": true,
+  "compatibility": {
+    "minimum": 14,
+    "verified": 14.367
+  },
+  "authors": [
+    {
+      "name": "JDR Ninja",
+	  "url": "https://www.jdr.ninja/"
+    }
+  ],
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/retro-crt-terminal.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    }
+  ],
+  "packs": [
+    {
+      "name": "gm-guide",
+      "label": "Retro CRT Terminal — Guides et modèles / Guides & Templates",
+      "path": "packs/gm-guide",
+      "type": "JournalEntry"
+    },
+    {
+      "name": "gm-macros",
+      "label": "Retro CRT Terminal — Macros du MJ / GM Macros",
+      "path": "packs/gm-macros",
+      "type": "Macro",
+      "private": true
+    }
+  ],
+  "documentTypes": {
+    "JournalEntryPage": {
+      "terminal": {}
+    }
+  }
+}

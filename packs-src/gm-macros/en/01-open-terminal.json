@@ -1,0 +1,14 @@
+{
+  "_id": "MacroEnOpen00001",
+  "name": "01 — Open a Terminal",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/portal.svg",
+  "scope": "global",
+  "command": "/**\n * OPEN A TERMINAL\n *\n * Usage:\n * 1. Drag this macro from the Compendium to your macro hotbar.\n * 2. Open its configuration.\n * 3. Replace TERMINAL_UUID with the Terminal Journal UUID.\n * 4. PAGE_UUID is optional; leave it empty to open the Home page.\n *\n * To copy a UUID in Foundry, right-click the Journal or page and choose\n * “Copy UUID” where available in your interface.\n */\n\n// ── CONFIGURATION TO EDIT ─────────────────────────────────────\nconst TERMINAL_UUID = \"JournalEntry.REPLACE_ME\";\nconst PAGE_UUID = \"\"; // Example: JournalEntry.xxx.JournalEntryPage.yyy\n// ──────────────────────────────────────────────────────────────\n\nconst api = game.modules.get(\"retro-crt-terminal\")?.api;\nif (!api) return ui.notifications.error(\"Retro CRT Terminal is not active.\");\nif (!TERMINAL_UUID || TERMINAL_UUID.includes(\"REPLACE_ME\")) {\n  return ui.notifications.warn(\"Edit TERMINAL_UUID in the macro configuration.\");\n}\n\nawait api.open(TERMINAL_UUID, PAGE_UUID ? { page: PAGE_UUID } : {});",
+  "folder": "MacroFolderEN001",
+  "sort": 100000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "en" } },
+  "_key": "!macros!MacroEnOpen00001"
+}

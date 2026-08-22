@@ -1,0 +1,81 @@
+{
+  "_id": "TplEnReveal00001",
+  "name": "Template 03 — Progressive Reveal",
+  "pages": [
+    {
+      "_id": "TplEnRevealMain1",
+      "name": "Communication Channel",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# COMMUNICATION CHANNEL\n\nReceived messages:\n\n::menu children\n::end",
+        "pageId": "main",
+        "pageType": "menu",
+        "navigation": { "label": "COMMUNICATION CHANNEL", "parent": "", "sort": 0, "showInParentMenu": false },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCESS DENIED" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 100000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplEnReveal00001.TplEnRevealMain1"
+    },
+    {
+      "_id": "TplEnRevealBrief",
+      "name": "Initial Briefing",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# INITIAL BRIEFING\n\nThe mission is proceeding normally. No incidents have been reported.\n\nThis page is visible from the start.",
+        "pageId": "initial-briefing",
+        "pageType": "document",
+        "navigation": { "label": "INITIAL BRIEFING", "parent": "main", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCESS DENIED" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 200000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplEnReveal00001.TplEnRevealBrief"
+    },
+    {
+      "_id": "TplEnRevealSig01",
+      "name": "Intercepted Signal",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# INTERCEPTED SIGNAL\n\nOrigin unknown.\n\n**They know we are here.**\n\nThis page starts hidden. Reveal it from the terminal structure at the dramatic moment.",
+        "pageId": "intercepted-signal",
+        "pageType": "document",
+        "navigation": { "label": "INTERCEPTED SIGNAL", "parent": "main", "sort": 200, "showInParentMenu": true },
+        "release": { "visibility": "hidden", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCESS DENIED" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 300000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplEnReveal00001.TplEnRevealSig01"
+    }
+  ],
+  "folder": "TplFolderEN00001",
+  "flags": {
+    "retro-crt-terminal": {
+      "template": true,
+      "templateLanguage": "en",
+      "terminal": {
+        "enabled": true,
+        "terminalId": "template-progressive-reveal",
+        "label": "Template — Progressive Reveal",
+        "startPageUuid": "",
+        "themeId": "green-crt",
+        "themeOverrides": {},
+        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-satellite-dish", "audience": "observers" },
+        "behavior": { "rememberPage": false, "showBootSequence": true, "closeOnEscapeAtRoot": false }
+      }
+    }
+  },
+  "sort": 300000,
+  "ownership": { "default": 0 },
+  "categories": [],
+  "_key": "!journal!TplEnReveal00001"
+}

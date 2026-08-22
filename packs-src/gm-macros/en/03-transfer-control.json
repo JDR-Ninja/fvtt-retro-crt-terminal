@@ -1,0 +1,14 @@
+{
+  "_id": "MacEnTransfer001",
+  "name": "03 — Transfer Control",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/direction.svg",
+  "scope": "global",
+  "command": "/**\n * TRANSFER CONTROL OF A PRESENTATION\n *\n * Run this macro while a synchronized presentation is active.\n * Set CONTROLLER to the exact name or ID of the new controller.\n * The new controller must be connected.\n */\n\n// ── CONFIGURATION TO EDIT ─────────────────────────────────────\nconst CONTROLLER = \"REPLACE_ME\"; // Example: \"Alice\"\n// ──────────────────────────────────────────────────────────────\n\nif (!game.user.isGM) return ui.notifications.error(\"This macro is for the GM only.\");\nconst api = game.modules.get(\"retro-crt-terminal\")?.api;\nif (!api) return ui.notifications.error(\"Retro CRT Terminal is not active.\");\nif (!api.shared.state?.active) return ui.notifications.warn(\"No synchronized presentation is active.\");\nif (!CONTROLLER || CONTROLLER === \"REPLACE_ME\") {\n  return ui.notifications.warn(\"Edit CONTROLLER in the macro configuration.\");\n}\n\nconst controller = game.users.get(CONTROLLER) ?? game.users.find(user => user.name === CONTROLLER);\nif (!controller) return ui.notifications.error(`User not found: ${CONTROLLER}`);\nif (!controller.active) return ui.notifications.error(`${controller.name} is not connected.`);\n\nawait api.shared.update({ controllerUserId: controller.id });\nui.notifications.info(`Control transferred to ${controller.name}.`);",
+  "folder": "MacroFolderEN001",
+  "sort": 300000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "en" } },
+  "_key": "!macros!MacEnTransfer001"
+}

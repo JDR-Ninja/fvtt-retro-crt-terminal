@@ -1,0 +1,39 @@
+<section class="tab {{#if tab.active}}active{{/if}}" data-tab="sync">
+  <p class="hint">{{localize "RETRO_CRT_TERMINAL.Sync.Hint"}}</p>
+
+  {{#if anotherActive}}
+    <p class="sync-warning"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Sync.ReplaceWarning"}}</p>
+  {{/if}}
+  {{#if activeHere}}
+    <p class="sync-current {{#unless controllerOnline}}is-offline{{/unless}}">
+      {{localize "RETRO_CRT_TERMINAL.Sync.CurrentController"}} <strong>{{controllerName}}</strong>
+      {{#unless controllerOnline}}— {{localize "RETRO_CRT_TERMINAL.Sync.Frozen"}}{{/unless}}
+    </p>
+  {{/if}}
+
+  {{#if canManageSync}}
+    <fieldset class="config-section">
+      <legend>{{localize "RETRO_CRT_TERMINAL.Sync.Controller"}}</legend>
+      <div class="form-group">
+        <label for="{{rootId}}-syncController">{{localize "RETRO_CRT_TERMINAL.Sync.ControllerLabel"}}</label>
+        <div class="form-fields">
+          <select id="{{rootId}}-syncController" data-sync-controller>
+            {{#each users}}<option value="{{id}}" {{#if controller}}selected{{/if}}>{{name}}{{#if isGM}} ({{localize "RETRO_CRT_TERMINAL.Sync.Gm"}}){{/if}}</option>{{/each}}
+          </select>
+        </div>
+      </div>
+      <div class="sync-actions">
+        {{#if activeHere}}
+          <button type="button" class="danger" data-action="stopSync">
+            <i class="fa-solid fa-stop" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Sync.Stop"}}
+          </button>
+        {{/if}}
+        <button type="button" data-action="startSync">
+          <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>{{localize syncSubmitLabel}}
+        </button>
+      </div>
+    </fieldset>
+  {{else}}
+    <p class="empty-state">{{localize "RETRO_CRT_TERMINAL.Sync.GmOnly"}}</p>
+  {{/if}}
+</section>

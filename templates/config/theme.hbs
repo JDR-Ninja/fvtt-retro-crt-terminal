@@ -1,0 +1,87 @@
+<section class="tab {{#if tab.active}}active{{/if}}" data-tab="theme">
+  <div class="terminal-preview-frame">
+    <div class="terminal-shell terminal-preview {{themeClasses}}" style="{{themeStyle}}" data-theme-preview>
+      <div class="terminal-screen">
+        <h2 class="terminal-heading">{{localize "RETRO_CRT_TERMINAL.ThemeEditor.PreviewHeading"}}</h2>
+        <p class="terminal-paragraph">{{localize "RETRO_CRT_TERMINAL.ThemeEditor.PreviewBody"}}</p>
+        <nav class="terminal-menu">
+          <span class="terminal-menu-item is-selected"><span class="terminal-menu-cursor">&gt;</span><span class="terminal-menu-label">{{localize "RETRO_CRT_TERMINAL.ThemeEditor.PreviewEntry"}}</span></span>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+    <div class="form-group theme-preset-row">
+      <label for="{{rootId}}-themeId">{{localize "RETRO_CRT_TERMINAL.Fields.Preset"}}</label>
+      <div class="form-fields">
+        <select id="{{rootId}}-themeId" name="themeId">
+          {{#each themes}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+        </select>
+        <button type="button" data-action="loadPreset">
+          <i class="fa-solid fa-rotate" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Actions.LoadPreset"}}
+        </button>
+      </div>
+      <p class="hint">{{localize "RETRO_CRT_TERMINAL.Hints.Preset"}}</p>
+    </div>
+  </fieldset>
+
+  <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.ThemeEditor.Typography"}}</legend>
+    <div class="form-group">
+      <label for="{{rootId}}-font">{{localize "RETRO_CRT_TERMINAL.Fields.Font"}}</label>
+      <div class="form-fields">
+        <select id="{{rootId}}-font" name="themeOverrides.typography.font">
+          {{#each fonts}}<option value="{{name}}" {{#if selected}}selected{{/if}}>{{name}}</option>{{/each}}
+        </select>
+      </div>
+    </div>
+    {{#each typography}}
+      <div class="form-group slider-group">
+        <label for="{{../rootId}}-{{name}}">{{localize label}}</label>
+        <div class="form-fields">
+          <input id="{{../rootId}}-{{name}}" type="range" name="{{name}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}">
+          <output data-slider-output="{{name}}">{{value}}</output>
+        </div>
+      </div>
+    {{/each}}
+    {{formGroup fields.themeOverrides.fields.typography.fields.uppercase value=source.themeOverrides.typography.uppercase name="themeOverrides.typography.uppercase" localize=true}}
+  </fieldset>
+
+  <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.ThemeEditor.Colors"}}</legend>
+    <div class="color-grid">
+      {{#each colors}}
+        <div class="form-group color-group">
+          <label for="{{../rootId}}-{{name}}">{{localize label}}</label>
+          <div class="form-fields">
+            <input id="{{../rootId}}-{{name}}" type="color" name="{{name}}" value="{{value}}">
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </fieldset>
+
+  <fieldset class="config-section" {{#unless editable}}disabled{{/unless}}>
+    <legend>{{localize "RETRO_CRT_TERMINAL.ThemeEditor.Effects"}}</legend>
+    {{#each effects}}
+      <div class="effect-card {{#if enabled}}is-on{{/if}}">
+        <label class="effect-switch">
+          <input type="checkbox" name="{{enabledName}}" {{checked enabled}}>
+          <span>{{localize label}}</span>
+        </label>
+        <div class="effect-sliders">
+          {{#each sliders}}
+            <div class="form-group slider-group">
+              <label for="{{../../rootId}}-{{name}}">{{localize label}}</label>
+              <div class="form-fields">
+                <input id="{{../../rootId}}-{{name}}" type="range" name="{{name}}" value="{{value}}" min="{{min}}" max="{{max}}" step="{{step}}">
+                <output data-slider-output="{{name}}">{{value}}</output>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    {{/each}}
+  </fieldset>
+</section>

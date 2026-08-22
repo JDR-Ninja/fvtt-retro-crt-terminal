@@ -1,0 +1,36 @@
+<section class="terminal-shell {{themeClasses}}" style="{{themeStyle}}" data-page-type="{{pageType}}">
+  <div class="terminal-boot" role="status">{{localize "RETRO_CRT_TERMINAL.Navigation.Booting"}}</div>
+  <header class="terminal-chrome">
+    <span class="terminal-node">{{terminalLabel}}</span>
+    {{#if synchronized}}
+      <span class="terminal-sync-status {{#unless controllerOnline}}is-offline{{/unless}}">
+        <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+        {{#if isSpectator}}{{localize "RETRO_CRT_TERMINAL.Sync.Observed"}}{{else}}{{localize "RETRO_CRT_TERMINAL.Sync.YouControl"}}{{/if}}
+        · {{controllerName}}
+      </span>
+    {{/if}}
+    <span class="terminal-status">● {{localize "RETRO_CRT_TERMINAL.Status.Online"}}</span>
+  </header>
+  <main class="terminal-screen" data-terminal-screen tabindex="0" aria-label="{{title}}">
+    {{#if missing}}
+      <p class="terminal-error">{{localize "RETRO_CRT_TERMINAL.Errors.FileUnavailable"}}</p>
+    {{/if}}
+  </main>
+  <footer class="terminal-footer">
+    <button type="button" data-action="back" {{#unless canBack}}disabled{{/unless}} {{#unless canControl}}disabled{{/unless}}>
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+      {{localize "RETRO_CRT_TERMINAL.Actions.Back"}}
+    </button>
+    <span>{{localize "RETRO_CRT_TERMINAL.Navigation.Help"}}</span>
+    {{#if canManageSync}}
+      <button type="button" data-action="sync">
+        <i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i>
+        {{localize "RETRO_CRT_TERMINAL.Sync.Manage"}}
+      </button>
+    {{/if}}
+    <button type="button" data-action="home" {{#unless canControl}}disabled{{/unless}}>
+      <i class="fa-solid fa-house" aria-hidden="true"></i>
+      {{localize "RETRO_CRT_TERMINAL.Actions.Home"}}
+    </button>
+  </footer>
+</section>

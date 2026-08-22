@@ -1,0 +1,34 @@
+<section class="guide-onboarding-content">
+  <header>
+    <i class="fa-solid fa-terminal" aria-hidden="true"></i>
+    <div>
+      <h2>{{localize "RETRO_CRT_TERMINAL.Guide.WelcomeHeading"}}</h2>
+      <p>{{localize "RETRO_CRT_TERMINAL.Guide.WelcomeIntro" version=version}}</p>
+    </div>
+  </header>
+
+  <ol class="guide-quick-steps">
+    <li><i class="fa-solid fa-book" aria-hidden="true"></i><span>{{localize "RETRO_CRT_TERMINAL.Guide.StepCreate"}}</span></li>
+    <li><i class="fa-solid fa-file-code" aria-hidden="true"></i><span>{{localize "RETRO_CRT_TERMINAL.Guide.StepAuthor"}}</span></li>
+    <li><i class="fa-solid fa-eye" aria-hidden="true"></i><span>{{localize "RETRO_CRT_TERMINAL.Guide.StepPublish"}}</span></li>
+    <li><i class="fa-solid fa-tower-broadcast" aria-hidden="true"></i><span>{{localize "RETRO_CRT_TERMINAL.Guide.StepSync"}}</span></li>
+  </ol>
+
+  <section class="guide-demo-action">
+    <div>
+      <strong>{{localize "RETRO_CRT_TERMINAL.Guide.DemoHeading"}}</strong>
+      <p>{{localize "RETRO_CRT_TERMINAL.Guide.DemoHint"}}</p>
+    </div>
+    <button type="button" data-action="launchExample" class="primary" data-uuid="{{exampleUuid}}">
+      <i class="fa-solid fa-play" aria-hidden="true"></i>{{localize exampleActionLabel}}
+    </button>
+  </section>
+
+  <p class="guide-note"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Guide.HelpAvailable"}}</p>
+
+  <footer class="form-actions">
+    <button type="button" data-action="disable" class="subtle">{{localize "RETRO_CRT_TERMINAL.Guide.NeverShow"}}</button>
+    <button type="button" data-action="dismiss">{{localize "RETRO_CRT_TERMINAL.Guide.Close"}}</button>
+    <button type="button" data-action="openGuide" class="primary"><i class="fa-solid fa-book-open" aria-hidden="true"></i>{{localize "RETRO_CRT_TERMINAL.Guide.Open"}}</button>
+  </footer>
+</section>

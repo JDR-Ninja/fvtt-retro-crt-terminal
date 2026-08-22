@@ -1,0 +1,12 @@
+{
+  "name": "Français — Macros",
+  "type": "Macro",
+  "folder": null,
+  "color": "#36d98b",
+  "sorting": "a",
+  "_id": "MacroFolderFR001",
+  "description": "Macros documentées à glisser sur la barre de raccourcis puis à personnaliser.",
+  "sort": 100000,
+  "flags": {},
+  "_key": "!folders!MacroFolderFR001"
+}

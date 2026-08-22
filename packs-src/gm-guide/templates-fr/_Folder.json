@@ -1,0 +1,12 @@
+{
+  "name": "Français — Modèles",
+  "type": "JournalEntry",
+  "folder": null,
+  "color": "#36d98b",
+  "sorting": "a",
+  "_id": "TplFolderFR00001",
+  "description": "Journaux Terminal prêts à importer et adapter.",
+  "sort": 100000,
+  "flags": {},
+  "_key": "!folders!TplFolderFR00001"
+}

@@ -1,0 +1,81 @@
+{
+  "_id": "TplFrReveal00001",
+  "name": "Modèle 03 — Révélation progressive",
+  "pages": [
+    {
+      "_id": "TplFrRevealMain1",
+      "name": "Canal de communication",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# CANAL DE COMMUNICATION\n\nMessages reçus :\n\n::menu children\n::end",
+        "pageId": "main",
+        "pageType": "menu",
+        "navigation": { "label": "CANAL DE COMMUNICATION", "parent": "", "sort": 0, "showInParentMenu": false },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 100000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrReveal00001.TplFrRevealMain1"
+    },
+    {
+      "_id": "TplFrRevealBrief",
+      "name": "Briefing initial",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# BRIEFING INITIAL\n\nLa mission suit son cours. Aucun incident n’a été signalé.\n\nCette page est visible dès le début.",
+        "pageId": "initial-briefing",
+        "pageType": "document",
+        "navigation": { "label": "BRIEFING INITIAL", "parent": "main", "sort": 100, "showInParentMenu": true },
+        "release": { "visibility": "visible", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 200000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrReveal00001.TplFrRevealBrief"
+    },
+    {
+      "_id": "TplFrRevealSig01",
+      "name": "Signal intercepté",
+      "type": "retro-crt-terminal.terminal",
+      "system": {
+        "source": "# SIGNAL INTERCEPTÉ\n\nOrigine inconnue.\n\n**Ils savent que nous sommes ici.**\n\nCette page commence masquée. Révélez-la depuis la structure du terminal au moment dramatique.",
+        "pageId": "intercepted-signal",
+        "pageType": "document",
+        "navigation": { "label": "SIGNAL INTERCEPTÉ", "parent": "main", "sort": 200, "showInParentMenu": true },
+        "release": { "visibility": "hidden", "access": "available" },
+        "lock": { "type": "none", "secret": "", "failureMessage": "ACCÈS REFUSÉ" },
+        "presentation": { "themeOverride": "", "startFocusedElement": "" }
+      },
+      "sort": 300000,
+      "ownership": { "default": -1 },
+      "flags": {},
+      "_key": "!journal.pages!TplFrReveal00001.TplFrRevealSig01"
+    }
+  ],
+  "folder": "TplFolderFR00001",
+  "flags": {
+    "retro-crt-terminal": {
+      "template": true,
+      "templateLanguage": "fr",
+      "terminal": {
+        "enabled": true,
+        "terminalId": "modele-revelation-progressive",
+        "label": "Modèle — Révélation progressive",
+        "startPageUuid": "",
+        "themeId": "green-crt",
+        "themeOverrides": {},
+        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-satellite-dish", "audience": "observers" },
+        "behavior": { "rememberPage": false, "showBootSequence": true, "closeOnEscapeAtRoot": false }
+      }
+    }
+  },
+  "sort": 300000,
+  "ownership": { "default": 0 },
+  "categories": [],
+  "_key": "!journal!TplFrReveal00001"
+}

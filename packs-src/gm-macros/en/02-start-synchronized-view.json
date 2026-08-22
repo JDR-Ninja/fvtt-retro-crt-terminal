@@ -1,0 +1,14 @@
+{
+  "_id": "MacroEnStart0001",
+  "name": "02 — Start Synchronized Presentation",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/eye.svg",
+  "scope": "global",
+  "command": "/**\n * START A SYNCHRONIZED PRESENTATION\n *\n * Every world user observes the same terminal. The assigned controller\n * navigates freely; the GM does not approve each action.\n *\n * TERMINAL_UUID: UUID of the Terminal Journal to present.\n * CONTROLLER: exact name or ID of a connected user. An empty string uses\n * the GM who executes the macro.\n *\n * Important: every user must have Observer permission on the Journal and\n * must be able to see its Home page.\n */\n\n// ── CONFIGURATION TO EDIT ─────────────────────────────────────\nconst TERMINAL_UUID = \"JournalEntry.REPLACE_ME\";\nconst CONTROLLER = \"\"; // Example: \"Alice\" or \"abc123UserId\"\n// ──────────────────────────────────────────────────────────────\n\nif (!game.user.isGM) return ui.notifications.error(\"This macro is for the GM only.\");\nconst api = game.modules.get(\"retro-crt-terminal\")?.api;\nif (!api) return ui.notifications.error(\"Retro CRT Terminal is not active.\");\nif (!TERMINAL_UUID || TERMINAL_UUID.includes(\"REPLACE_ME\")) {\n  return ui.notifications.warn(\"Edit TERMINAL_UUID in the macro configuration.\");\n}\n\nconst controller = CONTROLLER\n  ? game.users.get(CONTROLLER) ?? game.users.find(user => user.name === CONTROLLER)\n  : game.user;\nif (!controller) return ui.notifications.error(`User not found: ${CONTROLLER}`);\nif (!controller.active) return ui.notifications.error(`${controller.name} is not connected.`);\n\nawait api.shared.start({\n  terminalRootUuid: TERMINAL_UUID,\n  controllerUserId: controller.id\n});\nui.notifications.info(`Presentation started — controller: ${controller.name}`);",
+  "folder": "MacroFolderEN001",
+  "sort": 200000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "en" } },
+  "_key": "!macros!MacroEnStart0001"
+}

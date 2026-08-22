@@ -1,0 +1,14 @@
+{
+  "_id": "MacFrTransfer001",
+  "name": "03 — Transférer le contrôle",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/direction.svg",
+  "scope": "global",
+  "command": "/**\n * TRANSFÉRER LE CONTRÔLE D’UNE PRÉSENTATION\n *\n * Exécutez cette macro pendant une présentation synchronisée active.\n * Modifiez CONTROLLER avec le nom exact ou l’ID du nouveau contrôleur.\n * Le nouvel utilisateur doit être connecté.\n */\n\n// ── CONFIGURATION À MODIFIER ──────────────────────────────────\nconst CONTROLLER = \"REMPLACEZ_MOI\"; // Exemple : \"Alice\"\n// ──────────────────────────────────────────────────────────────\n\nif (!game.user.isGM) return ui.notifications.error(\"Cette macro est réservée au MJ.\");\nconst api = game.modules.get(\"retro-crt-terminal\")?.api;\nif (!api) return ui.notifications.error(\"Retro CRT Terminal n’est pas actif.\");\nif (!api.shared.state?.active) return ui.notifications.warn(\"Aucune présentation synchronisée n’est active.\");\nif (!CONTROLLER || CONTROLLER === \"REMPLACEZ_MOI\") {\n  return ui.notifications.warn(\"Modifiez CONTROLLER dans la configuration de la macro.\");\n}\n\nconst controller = game.users.get(CONTROLLER) ?? game.users.find(user => user.name === CONTROLLER);\nif (!controller) return ui.notifications.error(`Utilisateur introuvable : ${CONTROLLER}`);\nif (!controller.active) return ui.notifications.error(`${controller.name} n’est pas connecté.`);\n\nawait api.shared.update({ controllerUserId: controller.id });\nui.notifications.info(`Contrôle transféré à ${controller.name}.`);",
+  "folder": "MacroFolderFR001",
+  "sort": 300000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "fr" } },
+  "_key": "!macros!MacFrTransfer001"
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "MacroFrReveal001",
+  "name": "05 — Révéler ou masquer une page",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/light.svg",
+  "scope": "global",
+  "command": "/**\n * RÉVÉLER OU MASQUER UNE PAGE TERMINAL\n *\n * PAGE_UUID doit désigner une page Terminal importée dans le monde.\n * MODE accepte trois valeurs :\n *   \"show\"   : rendre la page visible;\n *   \"hide\"   : masquer la page;\n *   \"toggle\" : inverser son état actuel.\n *\n * Une page masquée disparaît des menus automatiques des joueurs. Son contenu\n * n’est pas supprimé et peut être révélé de nouveau avec la même macro.\n */\n\n// ── CONFIGURATION À MODIFIER ──────────────────────────────────\nconst PAGE_UUID = \"JournalEntry.REMPLACEZ_MOI.JournalEntryPage.REMPLACEZ_MOI\";\nconst MODE = \"toggle\"; // \"show\", \"hide\" ou \"toggle\"\n// ──────────────────────────────────────────────────────────────\n\nif (!game.user.isGM) return ui.notifications.error(\"Cette macro est réservée au MJ.\");\nif (!game.modules.get(\"retro-crt-terminal\")?.active) {\n  return ui.notifications.error(\"Retro CRT Terminal n’est pas actif.\");\n}\nif (!PAGE_UUID || PAGE_UUID.includes(\"REMPLACEZ_MOI\")) {\n  return ui.notifications.warn(\"Modifiez PAGE_UUID dans la configuration de la macro.\");\n}\nif (![\"show\", \"hide\", \"toggle\"].includes(MODE)) {\n  return ui.notifications.error(\"MODE doit être show, hide ou toggle.\");\n}\n\nconst page = await foundry.utils.fromUuid(PAGE_UUID);\nif (page?.documentName !== \"JournalEntryPage\" || page.type !== \"retro-crt-terminal.terminal\") {\n  return ui.notifications.error(\"PAGE_UUID ne désigne pas une page Retro CRT Terminal.\");\n}\n\nconst current = page.system.release.visibility;\nconst visibility = MODE === \"show\" ? \"visible\" : MODE === \"hide\" ? \"hidden\" : current === \"hidden\" ? \"visible\" : \"hidden\";\nawait page.update({ \"system.release.visibility\": visibility });\nui.notifications.info(`${page.name} est maintenant ${visibility === \"visible\" ? \"visible\" : \"masquée\"}.`);",
+  "folder": "MacroFolderFR001",
+  "sort": 500000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "fr" } },
+  "_key": "!macros!MacroFrReveal001"
+}

@@ -1,0 +1,14 @@
+{
+  "_id": "MacroFrOpen00001",
+  "name": "01 — Ouvrir un terminal",
+  "type": "script",
+  "author": null,
+  "img": "icons/svg/portal.svg",
+  "scope": "global",
+  "command": "/**\n * OUVRIR UN TERMINAL\n *\n * Utilisation :\n * 1. Glissez cette macro du Compendium vers votre barre de macros.\n * 2. Ouvrez sa configuration.\n * 3. Remplacez TERMINAL_UUID par l’UUID du Journal Terminal.\n * 4. PAGE_UUID est facultatif; laissez-le vide pour ouvrir la page d’accueil.\n *\n * Pour copier un UUID dans Foundry : clic droit sur le Journal ou la page,\n * puis « Copier l’UUID » selon votre interface.\n */\n\n// ── CONFIGURATION À MODIFIER ──────────────────────────────────\nconst TERMINAL_UUID = \"JournalEntry.REMPLACEZ_MOI\";\nconst PAGE_UUID = \"\"; // Exemple : JournalEntry.xxx.JournalEntryPage.yyy\n// ──────────────────────────────────────────────────────────────\n\nconst api = game.modules.get(\"retro-crt-terminal\")?.api;\nif (!api) return ui.notifications.error(\"Retro CRT Terminal n’est pas actif.\");\nif (!TERMINAL_UUID || TERMINAL_UUID.includes(\"REMPLACEZ_MOI\")) {\n  return ui.notifications.warn(\"Modifiez TERMINAL_UUID dans la configuration de la macro.\");\n}\n\nawait api.open(TERMINAL_UUID, PAGE_UUID ? { page: PAGE_UUID } : {});",
+  "folder": "MacroFolderFR001",
+  "sort": 100000,
+  "ownership": { "default": 0 },
+  "flags": { "retro-crt-terminal": { "macroTemplate": true, "language": "fr" } },
+  "_key": "!macros!MacroFrOpen00001"
+}
