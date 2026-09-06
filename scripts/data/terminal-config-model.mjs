@@ -68,8 +68,7 @@ export class TerminalConfigModel extends foundry.abstract.DataModel {
           initial: launcher.icon,
           label: `${FIELDS}.Icon`,
           hint: `${HINTS}.Icon`
-        }),
-        audience: new fields.StringField({ required: true, blank: false, initial: launcher.audience })
+        })
       }),
       behavior: new fields.SchemaField({
         showBootSequence: new fields.BooleanField({

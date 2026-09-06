@@ -17,9 +17,9 @@ export async function resolveMenu(node, currentPage, options = {}) {
   const items = [];
   for (const candidate of candidates) {
     if (!candidate.document) {
-      const label = candidate.label || candidate.target;
-      if (options.user?.isGM || options.gmDebug) items.push({ label, target: candidate.target, state: "missing", accessible: false, debug: "BROKEN" });
-      else items.push({ label, target: candidate.target, state: "missing", accessible: false });
+      // The authored label may name content the player has no right to know about.
+      if (options.user?.isGM) items.push({ label: candidate.label || candidate.target, target: candidate.target, state: "missing", accessible: false, debug: "BROKEN" });
+      else items.push({ label: localize("RETRO_CRT_TERMINAL.Status.Unavailable", "UNAVAILABLE"), target: candidate.target, state: "missing", accessible: false });
       continue;
     }
     const release = resolveRelease(candidate.document, options);
@@ -35,4 +35,8 @@ export async function resolveMenu(node, currentPage, options = {}) {
     });
   }
   return { ...node, items };
+}
+
+function localize(key, fallback) {
+  return globalThis.game?.i18n?.has?.(key) ? game.i18n.localize(key) : fallback;
 }

@@ -29,7 +29,6 @@ class SharedSessionManager {
     game.socket.on(SOCKET_CHANNEL, packet => this.receive(packet));
     const persisted = game.settings.get(MODULE_ID, SHARED_SESSION_SETTING);
     await this.acceptPersistedState(persisted);
-    if (this.active && this.isParticipant && !this.isController) this.requestSnapshot();
   }
 
   async acceptPersistedState(state) {
@@ -39,7 +38,7 @@ class SharedSessionManager {
     }
     let best = state;
     const controllerState = game.users.get(state.controllerUserId)?.getFlag(MODULE_ID, SHARED_SESSION_FLAG);
-    if (state.active && controllerState?.sessionId === state.sessionId && controllerState.revision > state.revision) best = controllerState;
+    if (state.active && controllerState?.revision > state.revision && sameSessionShape(controllerState, state)) best = controllerState;
     await this.acceptState(best);
   }
 
@@ -119,54 +118,52 @@ class SharedSessionManager {
   }
   unlock(pageUuid) { return this.broadcastControllerAction("unlock", { pageUuid }, { persist: true }); }
 
+  // Access-bearing state travels through the controller's own User document, which the server
+  // only lets that user (or a GM) write. The socket carries nothing but the menu cursor.
   async broadcastControllerAction(action, payload, { persist, selectionOnly = false }) {
     if (!this.isController) return false;
     const next = applySharedAction(this.state, action, payload);
     if (next === this.state) return false;
     await this.acceptState(next, { selectionOnly, force: true });
+    if (persist) {
+      await game.user.setFlag(MODULE_ID, SHARED_SESSION_FLAG, next);
+      return true;
+    }
     game.socket.emit(SOCKET_CHANNEL, {
       type: "controller-state",
       senderUserId: game.user.id,
       sessionId: next.sessionId,
-      selectionOnly,
-      state: next
+      selectionOnly: true,
+      selectedIndex: next.selectedIndex
     });
-    if (persist) await game.user.setFlag(MODULE_ID, SHARED_SESSION_FLAG, next);
     return true;
   }
 
-  requestSnapshot() {
-    if (!this.active) return;
-    game.socket.emit(SOCKET_CHANNEL, {
-      type: "snapshot-request",
-      sessionId: this.state.sessionId,
-      requesterUserId: game.user.id
-    });
+  // Foundry relays module socket packets verbatim, so senderUserId is unverifiable: a forged
+  // packet must at worst be able to move a highlight.
+  async receive(packet) {
+    if (packet?.type !== "controller-state") return;
+    if (packet.sessionId !== this.state?.sessionId) return;
+    if (packet.selectionOnly !== true) return;
+    if (packet.senderUserId !== this.state.controllerUserId) return;
+    await this.acceptSelectedIndex(packet.selectedIndex);
   }
 
-  async receive(packet) {
-    if (!packet || packet.sessionId !== this.state?.sessionId) return;
-    if (packet.type === "snapshot-request") {
-      if (!this.isController) return;
-      game.socket.emit(SOCKET_CHANNEL, {
-        type: "controller-state",
-        senderUserId: game.user.id,
-        targetUserId: packet.requesterUserId,
-        sessionId: this.state.sessionId,
-        selectionOnly: false,
-        state: this.state
-      });
-      return;
-    }
-    if (packet.type !== "controller-state") return;
-    if (packet.targetUserId && packet.targetUserId !== game.user.id) return;
-    if (packet.senderUserId !== this.state.controllerUserId) return;
-    if (packet.state?.controllerUserId !== this.state.controllerUserId) return;
-    if (packet.state?.terminalRootUuid !== this.state.terminalRootUuid) return;
-    if (packet.state?.homePageUuid !== this.state.homePageUuid) return;
-    if (packet.state?.managerUserId !== this.state.managerUserId) return;
-    if (!sameMembers(packet.state?.audienceUserIds, this.state.audienceUserIds)) return;
-    await this.acceptState(packet.state, { selectionOnly: packet.selectionOnly });
+  async acceptSelectedIndex(index) {
+    if (!this.active) return false;
+    const selectedIndex = Math.max(0, Math.trunc(Number(index)) || 0);
+    if (selectedIndex === this.state.selectedIndex) return false;
+    this.state.selectedIndex = selectedIndex;
+    for (const app of this.applications) app.applySharedState?.(this.state, { selectionOnly: true });
+    return true;
+  }
+
+  async acceptControllerState(user) {
+    if (!this.active || !user || user.id !== this.state.controllerUserId) return false;
+    const state = user.getFlag?.(MODULE_ID, SHARED_SESSION_FLAG);
+    if (!(state?.revision > this.state.revision) || !sameSessionShape(state, this.state)) return false;
+    await this.acceptState(state);
+    return true;
   }
 
   async acceptState(state, { selectionOnly = false, force = false } = {}) {
@@ -222,8 +219,8 @@ class SharedSessionManager {
 
   async join() {
     if (!this.isParticipant) return false;
+    await this.acceptControllerState(this.controller);
     await this.ensureApplication();
-    this.requestSnapshot();
     return true;
   }
 
@@ -281,6 +278,15 @@ function sameMembers(left, right) {
   if (!Array.isArray(left) || !Array.isArray(right) || left.length !== right.length) return false;
   const expected = new Set(right);
   return left.every(id => expected.has(id));
+}
+
+function sameSessionShape(candidate, reference) {
+  return candidate?.sessionId === reference?.sessionId
+    && candidate.terminalRootUuid === reference.terminalRootUuid
+    && candidate.homePageUuid === reference.homePageUuid
+    && candidate.controllerUserId === reference.controllerUserId
+    && candidate.managerUserId === reference.managerUserId
+    && sameMembers(candidate.audienceUserIds, reference.audienceUserIds);
 }
 
 export const sharedSessionManager = new SharedSessionManager();

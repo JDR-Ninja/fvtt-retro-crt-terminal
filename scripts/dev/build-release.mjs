@@ -33,7 +33,7 @@ const result = await build({
   metafile: true
 });
 
-for (const entry of ["lang", "styles", "templates", "assets", "fonts", "LICENSE", "README.md"]) {
+for (const entry of ["lang", "styles", "templates", "assets", "fonts", "LICENSE", "README.md", "CHANGELOG.md"]) {
   const source = join(root, entry);
   if (await exists(source)) await cp(source, join(output, entry), { recursive: true });
 }

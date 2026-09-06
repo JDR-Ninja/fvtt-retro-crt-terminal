@@ -44,8 +44,10 @@ function renderMenu(block, { onNavigate, menuIndex } = {}) {
     if (!item.accessible) button.dataset.state = item.state;
     button.append(element("span", "terminal-menu-cursor", document.createTextNode(">")));
     button.append(element("span", "terminal-menu-label", document.createTextNode(item.label)));
+    const unavailable = localize("RETRO_CRT_TERMINAL.Status.Unavailable", "UNAVAILABLE");
     if (item.state === "locked") button.append(element("span", "terminal-menu-state", document.createTextNode(`[${localize("RETRO_CRT_TERMINAL.Status.Locked", "LOCKED")}]`)));
-    else if (item.state === "missing") button.append(element("span", "terminal-menu-state", document.createTextNode(`[${localize("RETRO_CRT_TERMINAL.Status.Unavailable", "UNAVAILABLE")}]`)));
+    // A redacted entry already reads as its own state; the marker would only repeat it.
+    else if (item.state === "missing" && item.label !== unavailable) button.append(element("span", "terminal-menu-state", document.createTextNode(`[${unavailable}]`)));
     else if (item.debug) button.append(element("span", "terminal-menu-state", document.createTextNode(`[${item.debug}]`)));
     button.addEventListener("click", () => onNavigate?.(item));
     menu.append(button);

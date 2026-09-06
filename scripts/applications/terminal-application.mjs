@@ -53,12 +53,17 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     this._typewriter = null;
     this._lastTypewriterKey = null;
     this._boundKeydown = event => this.keyboard.handle(event);
-    const sharedSessionId = options.sharedSessionId
-      ?? (sharedSessionManager.active && sharedSessionManager.state.terminalRootUuid === root.uuid && sharedSessionManager.isParticipant
-        ? sharedSessionManager.state.sessionId
-        : null);
+    const sharedSessionId = TerminalApplication.resolveSharedSessionId(root.uuid, options);
     this.sharedSessionId = sharedSessionId;
     if (sharedSessionId) sharedSessionManager.registerApplication(this, sharedSessionId);
+  }
+
+  static resolveSharedSessionId(rootUuid, options = {}) {
+    if (options.sharedSessionId) return options.sharedSessionId;
+    const state = sharedSessionManager.state;
+    return sharedSessionManager.active && state.terminalRootUuid === rootUuid && sharedSessionManager.isParticipant
+      ? state.sessionId
+      : null;
   }
 
   get synchronized() {
@@ -73,27 +78,30 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     return Boolean(this._typewriter?.active);
   }
 
+  // Debug visibility would give the GM extra menu rows, desynchronizing every observer's cursor.
+  get gmDebug() {
+    return !this.synchronized && Boolean(game.user.isGM) && Boolean(game.settings.get(MODULE_ID, "gmDebug"));
+  }
+
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const page = await resolveDocument(this.session.currentPageUuid);
     if (!page) {
       this.viewModel = { blocks: [], diagnostics: [], missing: true };
-      return { ...context, title: this.config.label, missing: true, ...this.prepareSyncContext() };
+      return {
+        ...context,
+        title: this.config.label,
+        terminalLabel: this.config.label,
+        missing: true,
+        ...this.prepareThemeContext(),
+        ...this.prepareSyncContext()
+      };
     }
     this.viewModel = await resolvePage(page, {
       user: game.user,
       sessionUnlocks: this.session.sessionUnlocks,
-      gmDebug: game.user.isGM && game.settings.get(MODULE_ID, "gmDebug")
+      gmDebug: this.gmDebug
     });
-    const theme = resolveTheme({
-      worldThemeId: game.settings.get(MODULE_ID, "defaultTheme"),
-      terminalThemeId: this.session.runtimeThemeId || this.config.themeId,
-      pageThemeId: page.system.presentation?.themeOverride,
-      terminalOverrides: this.config.themeOverrides,
-      effectsEnabled: game.settings.get(MODULE_ID, "effectsEnabled")
-    });
-    const effectsEnabled = game.settings.get(MODULE_ID, "effectsEnabled");
-    const reduceMotion = !effectsEnabled || globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     return {
       ...context,
       title: page.name,
@@ -101,11 +109,25 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
       pageType: page.system.pageType,
       missing: false,
       canBack: this.session.history.length > 0,
+      ...this.prepareThemeContext(page),
+      ...this.prepareSyncContext()
+    };
+  }
+
+  prepareThemeContext(page = null) {
+    const effectsEnabled = game.settings.get(MODULE_ID, "effectsEnabled");
+    const theme = resolveTheme({
+      worldThemeId: game.settings.get(MODULE_ID, "defaultTheme"),
+      terminalThemeId: this.session.runtimeThemeId || this.config.themeId,
+      pageThemeId: page?.system.presentation?.themeOverride,
+      terminalOverrides: this.config.themeOverrides,
+      effectsEnabled
+    });
+    return {
       themeStyle: themeToStyle(theme),
       themeClasses: themeClasses(theme),
-      reduceMotion,
-      typewriterSpeed: Number(game.settings.get(MODULE_ID, "typewriterSpeed")) || 0,
-      ...this.prepareSyncContext()
+      reduceMotion: !effectsEnabled || globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches,
+      typewriterSpeed: Number(game.settings.get(MODULE_ID, "typewriterSpeed")) || 0
     };
   }
 
@@ -132,7 +154,7 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
       button.dataset.menuIndex = "0";
       button.textContent = game.i18n.localize("RETRO_CRT_TERMINAL.Actions.Access");
       button.addEventListener("click", async () => {
-        if (await this.requestUnlock(this.viewModel.page)) await this.render();
+        if (await this.requestUnlock(this.viewModel.page, this.viewModel.release)) await this.render();
       });
       screen.replaceChildren(heading, button);
     } else if (screen && !this.viewModel.release?.accessible) {
@@ -199,11 +221,11 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     const release = resolveRelease(page, {
       user: game.user,
       sessionUnlocks: this.session.sessionUnlocks,
-      gmDebug: game.user.isGM && game.settings.get(MODULE_ID, "gmDebug")
+      gmDebug: this.gmDebug
     });
     if (!release.visible) return ui.notifications.warn(game.i18n.localize("RETRO_CRT_TERMINAL.Errors.FileUnavailable"));
     if (!release.accessible) {
-      const unlocked = await this.requestUnlock(page);
+      const unlocked = await this.requestUnlock(page, release);
       if (!unlocked) return;
     }
     if (this.synchronized) return sharedSessionManager.navigate(page.uuid);
@@ -212,11 +234,21 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     await this.render();
   }
 
-  async requestUnlock(page) {
-    const lock = page.system.lock ?? {};
+  /** The lock that guards a page may live on an ancestor, which is what has to be unlocked. */
+  async lockGate(page, release) {
+    return release?.blockedBy ? await resolveDocument(release.blockedBy) ?? page : page;
+  }
+
+  async applyUnlock(pageUuid) {
+    if (this.synchronized) await sharedSessionManager.unlock(pageUuid);
+    else this.session.unlock(pageUuid);
+  }
+
+  async requestUnlock(page, release = null) {
+    const gate = await this.lockGate(page, release);
+    const lock = gate.system.lock ?? {};
     if (game.user.isGM) {
-      if (this.synchronized) await sharedSessionManager.unlock(page.uuid);
-      else this.session.unlock(page.uuid);
+      await this.applyUnlock(gate.uuid);
       return true;
     }
     if (lock.type !== "password") {
@@ -231,8 +263,7 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
       modal: true
     });
     if (result && String(result.password ?? "") === String(lock.secret ?? "")) {
-      if (this.synchronized) await sharedSessionManager.unlock(page.uuid);
-      else this.session.unlock(page.uuid);
+      await this.applyUnlock(gate.uuid);
       return true;
     }
     ui.notifications.warn(lock.failureMessage || game.i18n.localize("RETRO_CRT_TERMINAL.Lock.AccessDenied"));
@@ -245,12 +276,13 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     if (!target) return ui.notifications.warn(game.i18n.localize("RETRO_CRT_TERMINAL.Errors.FileUnavailable"));
     const release = resolveRelease(target, { user: game.user, sessionUnlocks: this.session.sessionUnlocks });
     if (!release.visible) return ui.notifications.warn(game.i18n.localize("RETRO_CRT_TERMINAL.Errors.FileUnavailable"));
-    if (String(password) !== String(target.system.lock?.secret ?? "")) return ui.notifications.warn(target.system.lock?.failureMessage || game.i18n.localize("RETRO_CRT_TERMINAL.Lock.AccessDenied"));
+    const gate = await this.lockGate(target, release);
+    if (String(password) !== String(gate.system.lock?.secret ?? "")) return ui.notifications.warn(gate.system.lock?.failureMessage || game.i18n.localize("RETRO_CRT_TERMINAL.Lock.AccessDenied"));
     if (this.synchronized) {
-      await sharedSessionManager.unlock(target.uuid);
+      await sharedSessionManager.unlock(gate.uuid);
       return sharedSessionManager.navigate(target.uuid);
     }
-    this.session.unlock(target.uuid);
+    this.session.unlock(gate.uuid);
     this.session.navigate(target.uuid);
     await this.rememberPage();
     await this.render();
@@ -272,6 +304,17 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     this.session.home(home.uuid);
     await this.rememberPage();
     await this.render();
+  }
+
+  // Reopening an already-open terminal must front the existing window, never stack a second one.
+  async focusPage(pageUuid) {
+    this.bringToFront?.();
+    if (!this.synchronized && pageUuid && pageUuid !== this.session.currentPageUuid) {
+      this.session.navigate(pageUuid);
+      await this.rememberPage();
+    }
+    await this.render({ force: true });
+    return this;
   }
 
   async rememberPage() {

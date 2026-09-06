@@ -22,6 +22,9 @@ export const TerminalAPI = Object.freeze({
     const page = isTerminalPage(document) ? document : await resolveStartPage(root, options.page || remembered);
     if (!page) throw localizedError("RETRO_CRT_TERMINAL.Errors.NoStartPage", "This terminal has no start page");
 
+    const existing = findOpenTerminal(root.uuid, TerminalApplication.resolveSharedSessionId(root.uuid, options));
+    if (existing) return existing.focusPage(page.uuid);
+
     const app = new TerminalApplication({ root, page, options });
     openTerminals.set(app.id, app);
     await app.render({ force: true });
@@ -58,6 +61,15 @@ export const TerminalAPI = Object.freeze({
     join() { return sharedSessionManager.join(); }
   })
 });
+
+function findOpenTerminal(rootUuid, sharedSessionId) {
+  for (const app of openTerminals.values()) {
+    if (!app.rendered || app.root?.uuid !== rootUuid) continue;
+    if ((app.sharedSessionId ?? null) !== sharedSessionId) continue;
+    return app;
+  }
+  return null;
+}
 
 function localizedError(key, fallback) {
   const message = globalThis.game?.i18n?.has?.(key) ? game.i18n.localize(key) : fallback;

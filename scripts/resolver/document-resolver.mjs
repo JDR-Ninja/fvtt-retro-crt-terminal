@@ -21,10 +21,11 @@ export async function resolveDocument(target) {
   return foundry.utils.fromUuid(uuid);
 }
 
-export async function resolveTerminalTarget(target, { currentPage = null } = {}) {
+export async function resolveTerminalTarget(target, { currentPage = null, journal = null } = {}) {
   if (typeof target === "string" && target.startsWith("terminal:")) {
     const pageId = target.slice("terminal:".length).trim().toLowerCase();
-    return terminalPages(currentPage?.parent).find(page => page.system.pageId.toLowerCase() === pageId) ?? null;
+    const root = journal ?? currentPage?.parent;
+    return terminalPages(root).find(page => String(page.system.pageId ?? "").toLowerCase() === pageId) ?? null;
   }
 
   const document = await resolveDocument(target);
@@ -36,7 +37,7 @@ export async function resolveTerminalTarget(target, { currentPage = null } = {})
 export async function resolveStartPage(journal, requestedPage = null) {
   if (!journal) return null;
   if (requestedPage) {
-    const requested = await resolveTerminalTarget(requestedPage);
+    const requested = await resolveTerminalTarget(requestedPage, { journal });
     if (requested && requested.parent?.uuid === journal.uuid) return requested;
   }
   const config = getTerminalConfig(journal);

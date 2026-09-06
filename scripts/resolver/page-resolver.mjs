@@ -3,14 +3,23 @@ import { resolveTerminalTarget } from "./document-resolver.mjs";
 import { resolveMenu } from "./menu-resolver.mjs";
 import { resolveRelease } from "./release-resolver.mjs";
 
-export async function resolveInlineLabels(nodes, currentPage) {
+export async function resolveInlineLabels(nodes, currentPage, options = {}) {
   const pending = [];
   collectUnlabelledLinks(nodes, pending);
   await Promise.all(pending.map(async node => {
     const document = await resolveTerminalTarget(node.target, { currentPage });
-    node.label = document?.name || node.target;
+    // A bare link must not name a page the reader cannot reach; the GM keeps the real
+    // name so a broken or hidden target stays diagnosable.
+    if (options.user?.isGM) node.label = document?.name || node.target;
+    else node.label = document && resolveRelease(document, options).visible
+      ? document.name
+      : localize("RETRO_CRT_TERMINAL.Status.Unavailable", "UNAVAILABLE");
   }));
   return pending.length;
+}
+
+function localize(key, fallback) {
+  return globalThis.game?.i18n?.has?.(key) ? game.i18n.localize(key) : fallback;
 }
 
 function collectUnlabelledLinks(nodes, pending) {
@@ -30,7 +39,7 @@ export async function resolvePage(page, options = {}) {
   for (const node of ast.children) {
     blocks.push(node.type === "menu" ? await resolveMenu(node, page, options) : node);
   }
-  await resolveInlineLabels(blocks, page);
+  await resolveInlineLabels(blocks, page, options);
   return {
     page,
     release,

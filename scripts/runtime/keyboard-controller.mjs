@@ -14,6 +14,12 @@ export class KeyboardController {
     }
     if (event.target?.matches?.("input, textarea, select")) return;
     if (CANVAS_KEYS.has(event.key) || /^[1-9]$/.test(event.key)) consume(event);
+    // Swallowed for spectators too: Foundry's default close would drop them out of the shared session.
+    if (event.key === "Escape") {
+      consume(event);
+      if (this.application.canControl) this.application.goBack();
+      return;
+    }
     if (!this.application.canControl) return;
     const buttons = [...this.application.element.querySelectorAll("[data-menu-index]")];
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
@@ -29,11 +35,6 @@ export class KeyboardController {
     if (event.key === "Enter" && buttons.length) {
       consume(event);
       buttons[this.application.session.selectedIndex]?.click();
-      return;
-    }
-    if (event.key === "Escape") {
-      consume(event);
-      this.application.goBack();
       return;
     }
     if (event.key === "Home") {

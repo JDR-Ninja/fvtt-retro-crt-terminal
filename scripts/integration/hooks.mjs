@@ -7,9 +7,12 @@ import { getTerminalConfig } from "../data/terminal-config.mjs";
 import { sharedSessionManager } from "../sync/shared-session-manager.mjs";
 import { openGamemasterGuide } from "../guide/gamemaster-guide.mjs";
 import { showGamemasterOnboarding } from "../applications/terminal-onboarding-application.mjs";
+import { loadMissingGoogleFonts } from "../themes/font-loader.mjs";
 
 export function registerHooks() {
   Hooks.once("ready", async () => {
+    // Started, not awaited: an unreachable CDN must not delay the session or the guide.
+    loadMissingGoogleFonts();
     await sharedSessionManager.initialize();
     await showGamemasterOnboarding();
   });
@@ -20,8 +23,12 @@ export function registerHooks() {
   Hooks.on("deleteJournalEntryPage", refreshForPage);
   Hooks.on("updateJournalEntry", refreshForJournal);
   Hooks.on(`${MODULE_ID}.closed`, app => openTerminals.delete(app.id));
-  Hooks.on("updateUser", () => {
-    for (const app of sharedSessionManager.applications) app.render();
+  // The controller's User document is the only shared-session channel the server authenticates,
+  // so it — not the socket — is what moves navigation, history and unlocks to the audience.
+  Hooks.on("updateUser", user => {
+    sharedSessionManager.acceptControllerState(user)
+      .then(applied => { if (!applied) for (const app of sharedSessionManager.applications) app.render(); })
+      .catch(error => console.error(`${MODULE_ID} |`, error));
     for (const app of openConfigApplications()) app.render();
     foundry.applications.instances.get(`${MODULE_ID}-launcher`)?.render();
   });

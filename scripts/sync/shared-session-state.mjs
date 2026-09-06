@@ -29,9 +29,12 @@ export function applySharedAction(state, action, payload = {}) {
   if (!state?.active) return state;
   const next = structuredClone(state);
   switch (action) {
+    // Cosmetic: the cursor travels over the unauthenticated socket, so it must not consume a
+    // revision that access-bearing state relies on to stay monotonic across clients.
     case "select":
       next.selectedIndex = Math.max(0, Number(payload.index) || 0);
-      break;
+      next.updatedAt = Date.now();
+      return next;
     case "navigate":
       if (!payload.pageUuid || payload.pageUuid === next.currentPageUuid) return state;
       next.history.push(next.currentPageUuid);

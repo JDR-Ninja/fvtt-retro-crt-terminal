@@ -1,5 +1,5 @@
-import { MODULE_ID, PAGE_TYPE } from "../constants.mjs";
-import { getTerminalConfig, setTerminalConfig } from "../data/terminal-config.mjs";
+import { FLAG_SCOPE, MODULE_ID, PAGE_TYPE, TERMINAL_FLAG } from "../constants.mjs";
+import { setTerminalConfig } from "../data/terminal-config.mjs";
 
 export const SECURITY_CONSOLE_TERMINAL_ID = "orpheus-security-console";
 export const SECURITY_CONSOLE_EXAMPLE_VERSION = 3;
@@ -14,8 +14,13 @@ export async function updateSecurityConsoleExample(journal) {
   return installSecurityConsoleExample(journal);
 }
 
+/**
+ * Reads the stored flag rather than the resolved configuration: getTerminalConfig falls
+ * back to slugify(journal.name), so a Journal merely named "Orpheus Security Console"
+ * would otherwise be mistaken for the demo and overwritten by the repair action.
+ */
 export function isSecurityConsoleExample(journal) {
-  return getTerminalConfig(journal).terminalId === SECURITY_CONSOLE_TERMINAL_ID;
+  return journal?.getFlag?.(FLAG_SCOPE, TERMINAL_FLAG)?.terminalId === SECURITY_CONSOLE_TERMINAL_ID;
 }
 
 async function installSecurityConsoleExample(existingJournal = null) {
@@ -48,7 +53,7 @@ async function installSecurityConsoleExample(existingJournal = null) {
     label: localize("TerminalName"),
     startPageUuid: startPage.uuid,
     themeId: "green-crt",
-    launcher: { published: true, sort: 0, icon: "fa-solid fa-computer", audience: "observers" }
+    launcher: { published: true, sort: 0, icon: "fa-solid fa-computer" }
   });
 
   return journal;

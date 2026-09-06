@@ -3,11 +3,13 @@ import { TerminalPageDataModel } from "./data/terminal-page-data-model.mjs";
 import { TerminalPageSheet } from "./applications/terminal-page-sheet.mjs";
 import { TerminalAPI } from "./api/terminal-api.mjs";
 import { ThemeRegistry } from "./themes/theme-registry.mjs";
+import { registerGoogleFonts } from "./themes/font-loader.mjs";
 import { registerSettings } from "./integration/settings.mjs";
 import { registerHooks } from "./integration/hooks.mjs";
 
 Hooks.once("init", () => {
   ThemeRegistry.initialize();
+  registerGoogleFonts();
   CONFIG.JournalEntryPage.dataModels[PAGE_TYPE] = TerminalPageDataModel;
   CONFIG.JournalEntryPage.typeIcons[PAGE_TYPE] = "fa-solid fa-terminal";
 

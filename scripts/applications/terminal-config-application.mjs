@@ -10,6 +10,44 @@ import { sharedSessionManager } from "../sync/shared-session-manager.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const THEME_PREFIX = "themeOverrides.";
+const SAVE_DELAY = 400;
+
+/**
+ * Collapses a burst of submissions into a single write. Colour pickers emit `change`
+ * throughout a drag, and every write is a world database update broadcast to all
+ * clients, so the form saves once the burst settles rather than on each event.
+ */
+export function createSaveScheduler(write, { delay = SAVE_DELAY } = {}) {
+  let timer = null;
+  let queued = null;
+  let chain = Promise.resolve();
+
+  function commit() {
+    clearTimeout(timer);
+    timer = null;
+    if (!queued) return chain;
+    const [payload] = queued;
+    queued = null;
+    chain = chain.catch(() => {}).then(() => write(payload));
+    chain.catch(() => {});
+    return chain;
+  }
+
+  return {
+    get pending() { return queued !== null; },
+    schedule(payload) {
+      queued = [payload];
+      clearTimeout(timer);
+      timer = setTimeout(commit, delay);
+    },
+    flush: commit,
+    cancel() {
+      clearTimeout(timer);
+      timer = null;
+      queued = null;
+    }
+  };
+}
 
 const TAB_DEFINITIONS = Object.freeze([
   { id: "general", icon: "fa-solid fa-sliders", label: "RETRO_CRT_TERMINAL.Config.Tabs.General" },
@@ -179,6 +217,42 @@ export class TerminalConfigApplication extends HandlebarsApplicationMixin(Applic
     preview.className = `terminal-shell terminal-preview ${themeClasses(theme)}`;
   }
 
+  async _preRender(context, options) {
+    await super._preRender?.(context, options);
+    // Rendering rebuilds every control from the stored flag, so a queued edit is written first.
+    await this.flushPendingSave();
+  }
+
+  _onClose(options) {
+    super._onClose?.(options);
+    clearTimeout(this._savedTimer);
+    // A colour or slider change still inside the debounce window would be lost otherwise.
+    this.flushPendingSave();
+  }
+
+  /** Never rejects: a failed write must not abort a render or a close. */
+  flushPendingSave() {
+    return Promise.resolve(this._saveScheduler?.flush())
+      .catch(error => console.error(`${MODULE_ID} |`, error));
+  }
+
+  get saveScheduler() {
+    this._saveScheduler ??= createSaveScheduler(submitted => this.persistConfig(submitted));
+    return this._saveScheduler;
+  }
+
+  /** The single point where the configuration flag is actually written. */
+  async persistConfig(submitted) {
+    const current = getTerminalConfig(this.journal);
+    const model = new TerminalConfigModel({
+      ...current,
+      ...submitted,
+      terminalId: slugify(submitted.terminalId) || current.terminalId
+    }, { strict: false });
+    await setTerminalConfig(this.journal, model.toObject());
+    this.reportSaved();
+  }
+
   reportSaved() {
     const status = this.element?.querySelector("[data-save-status]");
     if (!status) return;
@@ -191,15 +265,9 @@ export class TerminalConfigApplication extends HandlebarsApplicationMixin(Applic
     return foundry.utils.fromUuid(target.dataset.uuid);
   }
 
-  static async onSubmit(_event, _form, formData) {
+  static onSubmit(_event, _form, formData) {
     if (!this.journal.isOwner) return;
-    const current = getTerminalConfig(this.journal);
-    const submitted = foundry.utils.expandObject(formData.object);
-    submitted.terminalId = slugify(submitted.terminalId) || current.terminalId;
-    submitted.launcher = { ...submitted.launcher, audience: current.launcher.audience };
-    const model = new TerminalConfigModel({ ...current, ...submitted }, { strict: false });
-    await setTerminalConfig(this.journal, model.toObject());
-    this.reportSaved();
+    this.saveScheduler.schedule(foundry.utils.expandObject(formData.object));
   }
 
   static onSelectTab(_event, target) {

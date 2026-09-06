@@ -29,8 +29,7 @@ export const DEFAULT_TERMINAL_CONFIG = Object.freeze({
   launcher: {
     published: false,
     sort: 0,
-    icon: "fa-solid fa-computer",
-    audience: "observers"
+    icon: "fa-solid fa-computer"
   },
   behavior: {
     rememberPage: false,

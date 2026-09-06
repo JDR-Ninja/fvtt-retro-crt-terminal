@@ -4,3 +4,9 @@ release/
 coverage/
 *.tgz
 
+# LevelDB runtime state, rewritten every time Foundry opens a pack. The compiled
+# pack data itself stays versioned so the repository can be cloned into Data/modules.
+packs/*/LOCK
+packs/*/LOG
+packs/*/LOG.old
+
