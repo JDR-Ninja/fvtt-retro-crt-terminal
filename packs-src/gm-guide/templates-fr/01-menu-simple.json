@@ -87,7 +87,7 @@
         "startPageUuid": "",
         "themeId": "green-crt",
         "themeOverrides": {},
-        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-computer", "audience": "observers" },
+        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-computer" },
         "behavior": { "rememberPage": false, "showBootSequence": true, "closeOnEscapeAtRoot": false }
       }
     }

@@ -47,6 +47,8 @@ export class KeyboardController {
       if (buttons[index]) {
         this.application.session.selectedIndex = index;
         if (this.application.synchronized) this.application.selectIndex(index);
+        // The highlight must land on the pressed row: a lock prompt leaves the menu on screen.
+        this.focus(buttons);
         buttons[index].click();
       }
     }

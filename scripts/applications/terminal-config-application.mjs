@@ -146,7 +146,7 @@ export class TerminalConfigApplication extends HandlebarsApplicationMixin(Applic
       typography: sliders(fields.themeOverrides.fields.typography, source.themeOverrides.typography, `${THEME_PREFIX}typography`),
       colors: swatches(fields.themeOverrides.fields.colors, source.themeOverrides.colors),
       effects: effectGroups(fields.themeOverrides.fields.effects, source.themeOverrides.effects),
-      pages: pages.map(page => structureRow(page)),
+      pages: structureRows(pages),
       empty: pages.length === 0,
       issues: validateTerminal(this.journal),
       ...this.prepareSyncContext()
@@ -405,13 +405,57 @@ function effectGroups(schemaField, values) {
   }));
 }
 
-function structureRow(page) {
+/**
+ * Rows in the order the terminal itself walks the pages: each page under its parent,
+ * siblings by sort. A flat list sorted by sort value interleaves branches, which hides
+ * the very hierarchy the tab exists to review.
+ */
+export function structureRows(pages) {
+  const ordered = [...pages].sort(pageSort);
+  const byId = new Map();
+  for (const page of ordered) {
+    const key = pageKey(page);
+    if (key && !byId.has(key)) byId.set(key, page);
+  }
+  const children = new Map();
+  const roots = [];
+  for (const page of ordered) {
+    const parentKey = String(page.system.navigation?.parent ?? "").trim().toLowerCase();
+    const parent = parentKey ? byId.get(parentKey) : null;
+    // An orphan keeps its (broken) parent id on display; the validator names it below the table.
+    if (!parent || parent === page) roots.push(page);
+    else children.set(parent, [...(children.get(parent) ?? []), page]);
+  }
+
+  const rows = [];
+  const visited = new Set();
+  const walk = (list, depth) => {
+    for (const page of list) {
+      if (visited.has(page)) continue; // a parent cycle would otherwise recurse forever
+      visited.add(page);
+      rows.push(structureRow(page, depth));
+      walk(children.get(page) ?? [], depth + 1);
+    }
+  };
+  walk(roots, 0);
+  // Pages caught in a parent cycle hang from no root; list them last so they stay reachable.
+  walk(ordered.filter(page => !visited.has(page)), 0);
+  return rows;
+}
+
+function pageKey(page) {
+  return String(page.system?.pageId ?? "").trim().toLowerCase();
+}
+
+function structureRow(page, depth = 0) {
   const release = page.system.release ?? {};
   return {
     uuid: page.uuid,
     pageId: page.system.pageId,
     label: page.system.navigation?.label || page.name,
     parent: page.system.navigation?.parent || "—",
+    depth,
+    isChild: depth > 0,
     visibility: release.visibility,
     access: release.access,
     visibilityLabel: localizeState(release.visibility),

@@ -29,9 +29,18 @@ export function registerHooks() {
     sharedSessionManager.acceptControllerState(user)
       .then(applied => { if (!applied) for (const app of sharedSessionManager.applications) app.render(); })
       .catch(error => console.error(`${MODULE_ID} |`, error));
-    for (const app of openConfigApplications()) app.render();
-    foundry.applications.instances.get(`${MODULE_ID}-launcher`)?.render();
+    refreshPresenceViews({ terminals: false });
   });
+  // A user joining or leaving is not a document update: without this, observers would keep
+  // seeing a controller who has already disconnected.
+  Hooks.on("userConnected", () => refreshPresenceViews());
+}
+
+/** Re-renders every window that displays who controls, or may control, a shared session. */
+export function refreshPresenceViews({ terminals = true } = {}) {
+  if (terminals) for (const app of sharedSessionManager.applications) app.render();
+  for (const app of openConfigApplications()) app.render();
+  foundry.applications.instances.get(`${MODULE_ID}-launcher`)?.render();
 }
 
 function addSceneControl(controls) {

@@ -69,7 +69,7 @@
         "startPageUuid": "",
         "themeId": "green-crt",
         "themeOverrides": {},
-        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-satellite-dish", "audience": "observers" },
+        "launcher": { "published": false, "sort": 0, "icon": "fa-solid fa-satellite-dish" },
         "behavior": { "rememberPage": false, "showBootSequence": true, "closeOnEscapeAtRoot": false }
       }
     }

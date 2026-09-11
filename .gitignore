@@ -4,9 +4,6 @@ release/
 coverage/
 *.tgz
 
-# LevelDB runtime state, rewritten every time Foundry opens a pack. The compiled
-# pack data itself stays versioned so the repository can be cloned into Data/modules.
-packs/*/LOCK
-packs/*/LOG
-packs/*/LOG.old
-
+# Compiled Compendium packs are build output: `npm run build:packs` produces them from
+# packs-src/ for development, and the release build compiles them again into dist/.
+packs/

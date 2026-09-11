@@ -59,6 +59,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  min-width: 0; /* a grid row otherwise grows to its nowrap content and pushes the shell past the window */
   padding: .55rem .85rem;
   color: var(--terminal-muted);
   background: color-mix(in srgb, var(--terminal-bg), transparent 8%);
@@ -83,6 +84,7 @@
 .terminal-sync-status.is-offline { color: var(--terminal-error); }
 
 .terminal-footer button {
+  flex: 0 0 auto;
   width: auto;
   min-width: 6.5rem;
   margin: 0;
@@ -91,6 +93,16 @@
   border: 1px solid var(--terminal-border);
   font: inherit;
   font-size: inherit;
+  white-space: nowrap;
+}
+/* Wider fonts (Share Tech Mono, IBM Plex Mono) must shorten the key legend, never wrap the buttons. */
+.terminal-footer > span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .terminal-footer button:hover:not(:disabled),
@@ -337,6 +349,7 @@ h6.terminal-heading { font-size: 1em; }
   align-items: center;
   gap: .7rem;
   width: 100%;
+  height: auto; /* two lines of text; Foundry's fixed button height would clip the second */
   margin: 1rem 0;
   padding: .7rem;
   color: #b6ffbf;
@@ -432,6 +445,12 @@ h6.terminal-heading { font-size: 1em; }
 .structure-table td { padding: .5rem; border-bottom: 1px solid var(--rct-border); text-align: left; }
 .structure-table td:first-child { display: grid; }
 .structure-table td:first-child small { color: var(--rct-muted); font-family: monospace; }
+/* Rows arrive in tree order; the indent is what makes a page read as its parent's child. */
+.structure-table td.structure-page { padding-left: calc(.5rem + var(--structure-depth, 0) * 1.1rem); }
+.structure-branch { margin-right: .35rem; color: var(--rct-muted); font-weight: 400; }
+/* The label column is the one that may wrap; ids and state pills stay on one line. */
+.structure-table td:nth-child(2) { font-family: monospace; white-space: nowrap; }
+.structure-table td:nth-child(3) { white-space: nowrap; }
 .state-pill { display: inline-block; margin: .1rem; padding: .16rem .4rem; border: 1px solid currentColor; border-radius: 999px; font-size: .72rem; text-transform: uppercase; }
 .state-pill.is-hidden,
 .state-pill.is-locked { color: var(--rct-warning); }
@@ -529,6 +548,16 @@ h6.terminal-heading { font-size: 1em; }
     animation-duration: .001ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+/* Markup samples in the Compendium guide pages. Foundry v14 styles every <code> as a
+   nowrap inline chip, which would fold a multi-line sample onto a single line. */
+.rct-code { margin: .5rem 0 1rem; white-space: pre-wrap; }
+.rct-code > code {
+  display: block;
+  padding: .4rem .6rem;
+  white-space: inherit;
+  word-break: normal;
 }
 
 /* Documentation screenshots embedded in the Compendium guide pages. */

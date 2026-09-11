@@ -104,7 +104,8 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     });
     return {
       ...context,
-      title: page.name,
+      // The screen's accessible name must not spell out a page the reader is not allowed to see.
+      title: this.viewModel.release.visible ? page.name : game.i18n.localize("RETRO_CRT_TERMINAL.Errors.FileUnavailable"),
       terminalLabel: this.config.label,
       pageType: page.system.pageType,
       missing: false,
@@ -172,7 +173,7 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
         control.tabIndex = -1;
         control.disabled = true;
       }
-    } else this.element.querySelector("[data-terminal-screen]")?.focus({ preventScroll: true });
+    } else this.focusScreen();
     let typingDelay = 0;
     if (this._bootPending) {
       this._bootPending = false;
@@ -200,6 +201,15 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
     if (!controller?.active) return false;
     controller.finish();
     this.stopBootSequence();
+    return true;
+  }
+
+  /** Keyboard navigation lives on the screen element; a spectator's window is never focused. */
+  focusScreen() {
+    if (!this.rendered || (this.synchronized && !this.canControl)) return false;
+    const screen = this.element?.querySelector("[data-terminal-screen]");
+    if (!screen) return false;
+    screen.focus({ preventScroll: true });
     return true;
   }
 
@@ -260,7 +270,10 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
       content: `<label>${game.i18n.localize("RETRO_CRT_TERMINAL.Lock.Prompt")}<input type="password" name="password" autocomplete="off" autofocus></label>`,
       ok: { label: game.i18n.localize("RETRO_CRT_TERMINAL.Actions.Submit") },
       rejectClose: false,
-      modal: true
+      modal: true,
+      // The prompt resolves while its modal is still on screen, which keeps the terminal inert:
+      // only once the dialog is torn down can the keyboard be handed back to the screen.
+      close: () => this.focusScreen()
     });
     if (result && String(result.password ?? "") === String(lock.secret ?? "")) {
       await this.applyUnlock(gate.uuid);

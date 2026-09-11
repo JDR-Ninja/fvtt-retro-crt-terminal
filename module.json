@@ -2,11 +2,11 @@
   "id": "retro-crt-terminal",
   "title": "Retro CRT Terminal",
   "description": "Create, publish, theme, lock, and progressively reveal keyboard-driven CRT terminals using Journal Entry pages.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "url": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal",
   "manifest": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/releases/latest/download/module.json",
   "changelog": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/blob/main/CHANGELOG.md",
-  "download": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/releases/download/v0.2.0/retro-crt-terminal.zip",
+  "download": "https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/releases/download/v0.2.1/retro-crt-terminal.zip",
   "socket": true,
   "compatibility": {
     "minimum": 14,

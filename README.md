@@ -6,17 +6,13 @@ Retro CRT Terminal is a Foundry Virtual Tabletop v14 module for authoring fictio
 
 Terminal pages use a client-side typewriter effect by default. A click or any non-modifier key reveals the complete screen immediately. Each user can adjust the delay per character—or disable it with a value of `0`—from the module settings; disabling CRT/VHS effects also disables progressive typing.
 
-## Development status
+## Installation
 
-The module is under active development. Its stable public entry point is:
+Requires Foundry VTT v14. In **Add-on Modules → Install Module**, paste the manifest URL, then enable **Retro CRT Terminal** in your world:
 
-```js
-await game.modules.get("retro-crt-terminal")?.api.open("JournalEntry.example");
 ```
-
-## Installation during development
-
-Place or link this repository in Foundry's `Data/modules/retro-crt-terminal` directory, enable the module in a v14 world, and create a Journal Entry page of type **Terminal**.
+https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/releases/latest/download/module.json
+```
 
 ## Creating a terminal
 
@@ -60,10 +56,6 @@ The module includes a bilingual **Guides & Templates** Journal Compendium. A com
 Ready-to-copy terminal Journals are grouped into **Français — Modèles** and **English — Templates** folders. Import a Journal into the world, rename it, assign a unique terminal ID, adjust its permissions, and publish it when it is ready for players. Templates are deliberately private and unpublished by default.
 
 The separate **GM Macros** Compendium provides ready-to-import script macros in **Français — Macros** and **English — Macros** folders. Drag a macro to the hotbar, open its configuration, and edit the clearly marked constants at the beginning. Included recipes open a terminal, start or stop synchronized presentation, transfer control, and reveal or hide a prepared page.
-
-Documentation screenshots live in `assets/screenshots` and are regenerated with `scripts/dev/Capture-Screenshot.ps1`, which captures a viewport region straight to WebP through `cwebp` (`winget install --id Google.Libwebp --exact`). The script refuses to write anything unless it finds the guard swatch the page paints at its top-left corner, so a window that steals focus cannot be captured by mistake. Run it with `-Calibrate -ExpectWidth <viewport width>` first to locate the viewport on screen.
-
-Editable pack sources live in `packs-src/gm-guide` and `packs-src/gm-macros`. Run `npm run build:packs` after changing them so both development Compendiums stay current. The release build always recompiles both packs with the official Foundry VTT CLI.
 
 ## Synchronized viewing
 
@@ -152,6 +144,8 @@ Visibility and access are independent:
 
 Automatic child menus are resolved each time a page is displayed, so revealing a prepared child never requires editing its parent source.
 
+These states only govern the terminal window: they are dramatic pacing, not a vault. A user with Observer permission on the Journal can still open the Journal itself from the sidebar and read every page, hidden or locked. Content that must stay secret until its reveal belongs in a separate Journal the players cannot observe, linked from the terminal by UUID.
+
 ## Public API
 
 ```js
@@ -177,28 +171,9 @@ await terminal.shared.update({ controllerUserId: "another-user" });
 await terminal.shared.stop();
 ```
 
-## Development checks
+## Contributing
 
-```sh
-npm run check
-npm test
-```
-
-The automated suite checks parser behavior, release-state filtering, automatic menus, navigation sessions, theme merging, localization completeness, module paths, JavaScript syntax, and registration against a mocked Foundry v14 public surface. A final interactive pass in Foundry is still required for sheet rendering and hook behavior.
-
-## Publishing a release
-
-GitHub Actions builds the Foundry package automatically when a GitHub Release is published:
-
-1. Update the same version in `module.json` and `package.json` (for example `0.2.0`).
-2. Commit and push the release-ready sources.
-3. On GitHub, create a Release from that commit with the matching `v` tag (for example `v0.2.0`).
-4. Publish the Release. The workflow runs the checks and tests, bundles and minifies the JavaScript, and attaches these assets:
-   - `retro-crt-terminal.zip` — the installable Foundry module;
-   - `module.json` — the stable Foundry manifest;
-   - `retro-crt-terminal.zip.sha256` — the package checksum.
-
-The release fails instead of publishing a mismatched package when the tag and manifest version differ. No npm secret is required; the workflow uses GitHub's repository-scoped token. To inspect the exact release output locally, run `npm run build`; generated files are written to the ignored `dist/` directory.
+Development setup, checks, Compendium sources, screenshots, and the release process are described in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

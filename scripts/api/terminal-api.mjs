@@ -2,6 +2,7 @@ import { MODULE_ID } from "../constants.mjs";
 import { getTerminalConfig } from "../data/terminal-config.mjs";
 import { resolveDocument, resolveStartPage, resolveTerminalTarget, isTerminalPage } from "../resolver/document-resolver.mjs";
 import { resolvePage } from "../resolver/page-resolver.mjs";
+import { canViewDocument } from "../resolver/permission-resolver.mjs";
 import { TerminalApplication } from "../applications/terminal-application.mjs";
 import { sharedSessionManager } from "../sync/shared-session-manager.mjs";
 import { openGamemasterGuide } from "../guide/gamemaster-guide.mjs";
@@ -15,6 +16,8 @@ export const TerminalAPI = Object.freeze({
 
     const root = isTerminalPage(document) ? document.parent : document;
     if (root?.documentName !== "JournalEntry") throw localizedError("RETRO_CRT_TERMINAL.Errors.InvalidDocument", "The target is not a terminal Journal or page");
+    // Every page would resolve as forbidden anyway; refusing here spares the user an empty window.
+    if (!canViewDocument(root, game.user)) throw localizedError("RETRO_CRT_TERMINAL.Errors.NoPermission", "You do not have permission to view this terminal");
     const config = getTerminalConfig(root);
     const remembered = !isTerminalPage(document) && !options.page && config.behavior.rememberPage
       ? game.user.getFlag(MODULE_ID, `lastPage-${root.id}`)

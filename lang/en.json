@@ -30,6 +30,7 @@
   "RETRO_CRT_TERMINAL.Errors.DocumentNotFound": "Terminal document not found.",
   "RETRO_CRT_TERMINAL.Errors.FileUnavailable": "FILE UNAVAILABLE",
   "RETRO_CRT_TERMINAL.Errors.InvalidDocument": "The target is not a terminal Journal or page.",
+  "RETRO_CRT_TERMINAL.Errors.NoPermission": "You do not have permission to view this terminal.",
   "RETRO_CRT_TERMINAL.Errors.NoStartPage": "This terminal has no start page.",
   "RETRO_CRT_TERMINAL.Fields.Access": "Access",
   "RETRO_CRT_TERMINAL.Fields.Actions": "Actions",

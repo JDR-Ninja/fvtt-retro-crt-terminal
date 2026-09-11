@@ -17,7 +17,10 @@
         <tbody>
           {{#each pages}}
             <tr>
-              <td><strong>{{label}}</strong><small>{{pageId}}</small></td>
+              <td class="structure-page" style="--structure-depth: {{depth}}">
+                <strong>{{#if isChild}}<span class="structure-branch" aria-hidden="true">└</span>{{/if}}{{label}}</strong>
+                <small>{{pageId}}</small>
+              </td>
               <td>{{parent}}</td>
               <td>
                 <span class="state-pill is-{{visibility}}">{{visibilityLabel}}</span>
