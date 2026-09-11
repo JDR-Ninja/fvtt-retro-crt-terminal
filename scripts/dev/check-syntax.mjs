@@ -17,10 +17,14 @@ const french = readJson(join(root, "lang/fr.json"));
 for (const relative of [
   ...manifest.esmodules,
   ...manifest.styles,
-  ...manifest.languages.map(language => language.path),
-  ...(manifest.packs ?? []).map(pack => pack.path)
+  ...manifest.languages.map(language => language.path)
 ]) {
   if (!existsSync(join(root, relative))) throw new Error(`Manifest path does not exist: ${relative}`);
+}
+// Compiled packs are build output, not versioned: what must exist is the source each one is built from.
+for (const pack of manifest.packs ?? []) {
+  if (pack.path !== `packs/${pack.name}`) throw new Error(`Pack ${pack.name} must compile to packs/${pack.name}, not ${pack.path}`);
+  if (!existsSync(join(root, "packs-src", pack.name))) throw new Error(`Manifest pack ${pack.name} has no source in packs-src/${pack.name}`);
 }
 
 const packSources = files.filter(path => path.includes(`${join(root, "packs-src")}`) && extname(path) === ".json");
