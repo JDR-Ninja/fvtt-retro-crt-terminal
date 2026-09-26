@@ -31,6 +31,24 @@ test("every shipped module is reachable from the module entry point", () => {
   }
 });
 
+// A client that joins over plain HTTP, at an address other than localhost, is outside a secure
+// context: crypto has no randomUUID() and navigator no clipboard. The terminal window threw before
+// it could open (issue #1), and the configuration window's copy buttons before they copied anything.
+const SECURE_CONTEXT_ONLY = [
+  { api: "randomUUID", pattern: /\.randomUUID\b/, instead: "randomId() from utils/random-id.mjs" },
+  { api: "navigator.clipboard", pattern: /\bnavigator\.clipboard\b/, instead: "game.clipboard.copyPlainText()" }
+];
+
+test("no shipped module reaches for an API that only a secure context exposes", () => {
+  for (const file of modules(SCRIPTS)) {
+    if (file.startsWith(BUILD_TOOLING)) continue;
+    const source = readFileSync(file, "utf8");
+    for (const { api, pattern, instead } of SECURE_CONTEXT_ONLY) {
+      assert.doesNotMatch(source, pattern, `${relative(SCRIPTS, file)} uses ${api}, which only a secure context exposes; use ${instead}`);
+    }
+  }
+});
+
 function modules(directory) {
   return readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
     const path = join(directory, entry.name);

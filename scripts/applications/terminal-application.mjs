@@ -9,6 +9,7 @@ import { KeyboardController } from "../runtime/keyboard-controller.mjs";
 import { startTypewriter } from "../runtime/typewriter-controller.mjs";
 import { resolveTheme, themeClasses, themeToStyle } from "../themes/theme-resolver.mjs";
 import { sharedSessionManager } from "../sync/shared-session-manager.mjs";
+import { randomId } from "../utils/random-id.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin, DialogV2 } = foundry.applications.api;
 
@@ -32,7 +33,7 @@ export class TerminalApplication extends HandlebarsApplicationMixin(ApplicationV
   constructor({ root, page, options = {} }) {
     const config = getTerminalConfig(root);
     super({
-      id: `${MODULE_ID}-${crypto.randomUUID()}`,
+      id: `${MODULE_ID}-${randomId()}`,
       window: { title: config.label || root.name },
       position: { width: options.fullscreen ? window.innerWidth : 820, height: options.fullscreen ? window.innerHeight : 620 }
     });

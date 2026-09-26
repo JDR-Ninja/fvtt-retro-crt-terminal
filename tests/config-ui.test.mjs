@@ -194,6 +194,45 @@ function submitColour(application, value) {
   });
 }
 
+// Over plain HTTP, at an address other than localhost, the page is not a secure context and its
+// navigator has no clipboard, like Node's: both copy buttons threw before copying anything, the
+// cause behind issue #1. Foundry's helper falls back to execCommand("copy") there, as the core's
+// own copy buttons do.
+test("Copy ID hands the terminal ID to Foundry's clipboard helper, then confirms", async t => {
+  const { copied, notices } = stubClipboard(t);
+  const { application } = configApplication();
+  application.element = { elements: { terminalId: { value: "orpheus-security-console" } } };
+
+  await TerminalConfigApplication.onCopyId.call(application);
+
+  assert.deepEqual(copied, ["orpheus-security-console"]);
+  assert.deepEqual(notices, ["RETRO_CRT_TERMINAL.Notifications.IdCopied"]);
+});
+
+test("Copy UUID hands the page UUID to Foundry's clipboard helper, then confirms", async t => {
+  const { copied, notices } = stubClipboard(t);
+  const { application } = configApplication();
+  const uuid = "JournalEntry.orpheus.JournalEntryPage.main";
+
+  await TerminalConfigApplication.onCopyUuid.call(application, null, { dataset: { uuid } });
+
+  assert.deepEqual(copied, [uuid]);
+  assert.deepEqual(notices, ["RETRO_CRT_TERMINAL.Notifications.UuidCopied"]);
+});
+
+function stubClipboard(t) {
+  const copied = [];
+  const notices = [];
+  const previous = { game: globalThis.game, ui: globalThis.ui };
+  globalThis.game = {
+    clipboard: { copyPlainText: async text => { copied.push(text); } },
+    i18n: { localize: key => key }
+  };
+  globalThis.ui = { notifications: { info: message => notices.push(message) } };
+  t.after(() => Object.assign(globalThis, previous));
+  return { copied, notices };
+}
+
 // Sorted flat, the demo reads "Main Menu, Public Access, Lena Voss, Laboratory Index…": every
 // branch interleaved by sort value, which is exactly the hierarchy the tab is meant to show.
 test("the Structure tab lists every page under its parent, in the terminal's own order", () => {

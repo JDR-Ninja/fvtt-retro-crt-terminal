@@ -293,7 +293,7 @@ export class TerminalConfigApplication extends HandlebarsApplicationMixin(Applic
   }
 
   static async onCopyId() {
-    await navigator.clipboard.writeText(this.element.elements.terminalId?.value ?? "");
+    await game.clipboard.copyPlainText(this.element.elements.terminalId?.value ?? "");
     ui.notifications.info(game.i18n.localize("RETRO_CRT_TERMINAL.Notifications.IdCopied"));
   }
 
@@ -320,7 +320,7 @@ export class TerminalConfigApplication extends HandlebarsApplicationMixin(Applic
   }
 
   static async onCopyUuid(_event, target) {
-    await navigator.clipboard.writeText(target.dataset.uuid);
+    await game.clipboard.copyPlainText(target.dataset.uuid);
     ui.notifications.info(game.i18n.localize("RETRO_CRT_TERMINAL.Notifications.UuidCopied"));
   }
 

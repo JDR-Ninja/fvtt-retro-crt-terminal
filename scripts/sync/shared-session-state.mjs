@@ -1,3 +1,5 @@
+import { randomId } from "../utils/random-id.mjs";
+
 export function createSharedSessionState({
   terminalRootUuid,
   currentPageUuid,
@@ -9,7 +11,7 @@ export function createSharedSessionState({
 }) {
   return {
     active: true,
-    sessionId: crypto.randomUUID(),
+    sessionId: randomId(),
     terminalRootUuid,
     currentPageUuid,
     homePageUuid,

@@ -5,6 +5,17 @@ All notable changes to Retro CRT Terminal are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] — 2026-09-26
+
+### Fixed
+
+- Players who join over plain HTTP — a self-hosted world reached by IP address or domain name, without HTTPS — can now open terminals, alone or through a synchronized session: the window no longer takes its id from `crypto.randomUUID()`, which browsers only expose on HTTPS or `localhost`. The password prompt, and a synchronized session started by a Gamemaster connected the same way, no longer depend on it either ([#1](https://github.com/JDR-Ninja/fvtt-retro-crt-terminal/issues/1)).
+- The Copy ID and Copy UUID buttons of the terminal configuration window now work over plain HTTP too. They called `navigator.clipboard`, which browsers likewise expose only on HTTPS or `localhost`, and threw without copying anything; they now go through Foundry's clipboard helper, which falls back to the browser's copy command when that API is missing or refused.
+
+### Changed
+
+- Verified against Foundry VTT 14.368.
+
 ## [0.2.1] — 2026-09-11
 
 ### Fixed

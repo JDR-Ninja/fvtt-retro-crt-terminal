@@ -1,3 +1,5 @@
+import { randomId } from "../utils/random-id.mjs";
+
 export function renderTerminalBlocks(container, viewModel, { onNavigate, onLogin } = {}) {
   container.replaceChildren();
   const menuIndex = { value: 0 };
@@ -57,7 +59,7 @@ function renderMenu(block, { onNavigate, menuIndex } = {}) {
 
 function renderLogin(block, { onLogin } = {}) {
   const form = element("form", "terminal-login");
-  const id = `terminal-password-${crypto.randomUUID()}`;
+  const id = `terminal-password-${randomId()}`;
   const label = element("label", "", document.createTextNode(block.prompt || localize("RETRO_CRT_TERMINAL.Lock.Prompt", "Authorization code")));
   label.htmlFor = id;
   const input = document.createElement("input");

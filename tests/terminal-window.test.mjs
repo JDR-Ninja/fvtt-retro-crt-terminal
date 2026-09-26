@@ -131,6 +131,21 @@ test("the unavailable-file screen is still themed", async () => {
   assert.equal(typeof context.typewriterSpeed, "number");
 });
 
+test("a player outside a secure context can open a terminal, alone or in a synchronized session", async t => {
+  outsideSecureContext(t);
+  const { journal, pages } = terminal();
+  reset({ documents: [journal, ...pages] });
+
+  const solo = await TerminalAPI.open(journal.uuid);
+  sharedSessionManager.state = sessionState(journal.uuid, pages[0].uuid);
+  const shared = await TerminalAPI.open(journal.uuid, { sharedSessionId: "session", page: pages[0].uuid });
+
+  assert.equal(solo.rendered, true);
+  assert.equal(shared.rendered, true);
+  assert.match(solo.id, /^retro-crt-terminal-\w+$/);
+  assert.notEqual(shared.id, solo.id);
+});
+
 function sessionState(terminalRootUuid, currentPageUuid, overrides = {}) {
   return {
     active: true,
@@ -220,4 +235,12 @@ function stubFoundry() {
     utils: { fromUuid: async () => null }
   };
   globalThis.game = { settings: { get: () => false }, modules: { get: () => ({}) } };
+}
+
+// Crypto as a player joining over plain HTTP gets it: getRandomValues() but no randomUUID() (issue #1).
+function outsideSecureContext(t) {
+  const descriptor = Object.getOwnPropertyDescriptor(globalThis, "crypto");
+  const secure = globalThis.crypto;
+  Object.defineProperty(globalThis, "crypto", { configurable: true, value: { getRandomValues: array => secure.getRandomValues(array) } });
+  t.after(() => Object.defineProperty(globalThis, "crypto", descriptor));
 }
